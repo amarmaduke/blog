@@ -1,21 +1,24 @@
 ---
 layout: post
-title: Test Markdown
+title:  "Test Post"
+date:   2016-01-28 23:18:40 -0500
+categories: Test Post
 ---
+This is a test post.
 
-# This is some test markdown
+{% highlight c++ %}
+void foo();
 
-* this is just
-* a simple
-* test
-* ya'know?
-
-- Ya
-- You know.
-
-Anotha one
-Anotha one
-:3
+int main()
+{
+   typedef std::complex<long double> c64;
+   typedef std::tuple<c64, c64, c64> triple;
+   triple t = make_tuple(std::polar(1.0, 2.0), c64(1, 2), c64(0, 0));
+   int x, y, z;
+   foo();
+   return 0;
+}
+{% endhighlight %}
 
 $$
 \begin{equation}
