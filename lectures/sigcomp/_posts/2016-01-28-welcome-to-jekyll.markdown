@@ -5,33 +5,10 @@ date:   2016-01-28 23:18:40 -0500
 categories: Test Post
 ---
 This is a test post.
-<svg id="svg" width="110" height="110">
+<svg id="svg" width="400" height="200">
 </svg>
-<script>
-   var paper = Snap("#svg");
-   var circle = paper.circle(10,10,10);
-   var states = [{
-       fill: '#bada55',
-       cx: 10,
-       cy: 10
-   }, {
-       fill: '#55bada',
-       cx: 100
-   }, {
-       fill: '#ba55da',
-       cy: 100
-   }, {
-       fill: '#000000',
-       cx: 10
-   }];
 
-   (function animateCircle(el, i) {
-       el.animate(states[i], 1000, function() {
-           animateCircle(el, ++i in states ? i : 0);
-       })
-   })(circle, 0);
-</script>
-
+> This is a quote
 
 {% highlight c++ %}
 void foo();
@@ -69,3 +46,28 @@ $$
     \end{array} \right)
 \end{align*}
 $$
+
+<script>
+   var paper = Snap("#svg");
+   var circle = paper.circle(10,10,10);
+   var states = [{
+       fill: '#bada55',
+       cx: 10,
+       cy: 10
+   }, {
+       fill: '#55bada',
+       cx: 100
+   }, {
+       fill: '#ba55da',
+       cy: 100
+   }, {
+       fill: '#000000',
+       cx: 10
+   }];
+
+   (function animateCircle(el, i) {
+       el.animate(states[i], 1000, function() {
+           animateCircle(el, ++i in states ? i : 0);
+       })
+   })(circle, 0);
+</script>
