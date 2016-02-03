@@ -24,9 +24,9 @@ They are `pair`, `tuple` (c++11), `vector`, `set`, `map`, `priority_queue`, and 
 
 `pair` and `tuple` (c++11) can be used to join two or more heterogeneous types together.
 Each value inside the structure can be accessed by member variables, or with `get<unsigned int>(tuple<T> t)` (c++11).
-It is more or less a style choice to use `pair` and `tuple` over static areas if the type is homogeneous.
-However, `pair` and `tuple` will be safer because of member access instead of pointer access.
-Example:
+It is more or less a style choice to use `pair` and `tuple` over custom structs.
+
+Example (c++11):
 
 {% highlight c++ %}
 #include <bits/stdc++.h>
@@ -62,24 +62,24 @@ In a competitive setting we're usually working with value types anyway, but if y
 ### Containers
 
 STL containers are useful for their properties and in a setting where you want to dynamically grow a data structure.
-Static structures are better off as static arrays because of the bound information the problem gives.
-However, it is still good to know the STL data structures when you inevitable encounter a problem that has you remove data or shrink and grow the container dynamically.
+Static data is better off as a static array because of the bound information available in the problem.
+However, it is still good to know the STL data structures when you inevitably encounter a problem that has you remove data or shrink and grow the data dynamically.
 
 #### Vector
 
-A `vector` should be considered the dynamic array. You should never bother using a pointer, allocating data yourself, and then worrying about deleting it.
+A `vector` should be considered the dynamic array. You should never bother using a pointer, allocating space yourself, and then worrying about deleting it.
 Repeat after me, if you don't know what to use to store that data, use a `vector`.
 The second step is to figure out what to use, and why you're choosing `vector` so often.
 
 A `vector` can be thought of as a contiguous collection of data in memory.
-This means that if you add data to the vector which is greater than it's originally allocated size, it has to copy all of it's data to a newly allocated array in memory.
-This sounds slow, but in practice we know about how much data the vector is going to contain, and it's clever about how much additional data it's going to take if it has to regrow.
+This means that if you add data to the vector which is greater than its originally allocated size, it has to copy all of its data to a newly allocated array in memory.
+This sounds slow, but in practice we know about how much data the vector is going to contain, and it is clever about how much additional data it is going to take if it has to regrow.
 
 Thus, we can think of a `vector` as having $$\mathcal{O}(1)$$ insertion and index time complexity.
 Deleting from a `vector` is more complicated.
 If you are consistently deleting elements, a `vector` might start to be a poor choice.
 
-Example usage:
+Example:
 
 {% highlight c++ %}
 #include <bits/stdc++.h>
@@ -103,7 +103,7 @@ Under the hood a set is really a tree and a useful benefit is that an iterator o
 We should choose a `set` either when we want to encapsulate some concept of uniqueness or we want to keep a dynamically changing collection of sorted values.
 Because of the nature of a `set` the insertion, search, and deletion time complexities are all $$\mathcal{O}(\log(n))$$.
 
-Example usage:
+Example (c++11):
 
 {% highlight c++ %}
 #include <bits/stdc++.h>
@@ -122,7 +122,7 @@ int main() {
 
 If you need a collection of key-value pairs for two heterogeneous types `Key` and `Value` then you want a `map`.
 Under the hood a `map` is most likely a balanced tree (not unlike a `set`).
-This means insertion, deletion, and search are going to have a similiar time complexity of $$\mathcal{O}(\log(n))$$.
+This means insertion, deletion, and search are going to have a similar time complexity of $$\mathcal{O}(\log(n))$$.
 One benefit of an STL `map` is the overloaded index operator:
 
 {% highlight c++ %}
@@ -365,74 +365,302 @@ Also note that we started with an ordered string, had we not started ordered we 
 
 ## Understanding Iterators and Using the STL
 
-qwer
+An iterator in C++ for simplicity can be thought of as any object that supports increment (`++it`), dereference to a reference type (`decltype(*it) == it::reference`), and other miscellaneous construction, destruction, and swappable requirements.
+For a competitive purpose the only thing we need to know and understand is that an iterator will give us the "next iterator" as well as a reference to the information it stores.
+This reference information need not be a direct reference to the `it::value_type`, as with for example a `map<int, int>` we have `map<int, int>::iterator::reference == &pair<int, int>`.
+This is because the iterator is returning all the information relative to it, i.e. the key-value pair stored in a map.
+Iterators in C++ are what in the future we'll just call a "Concept."
+A C++ iterator is not an interface, and object inheriting from a class iterator, or anything of the sort.
+It is merely a construct that meets the pre and post conditions which define the concept "Iterator."
+
+Because of this distinction a useful realization is that pointers are iterators.
+That means, the only thing we need to do to iterate over a contiguous range of memory is supply a pointer to the first memory address and the pointer to one past the last memory address.
+"One past the last," is a common design choice in all of the STL.
+Whenever you want to give a range to something in terms of two iterators (a begin and an end), you're always doing it in a half-closed range.
+That means, if I have a range defined by $$a$$ and $$b$$, then the actual range that my algorithms should be working over is $$[a, b)$$.
+Open on the left, closed on the right.
+
+Example:
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 101;
+int values[N];
+
+struct gen {
+   int val;
+   gen() : val(0) { }
+   int operator() () { return ++val; }
+} generator;
+
+template<typename T>
+struct display {
+   void operator() (const T& x) { cout << x << " "; }
+};
+
+display<int> displayer;
+
+int main() {
+   generate(values, values + N, generator);
+   for_each(values, values + N, displayer);
+   cout << endl;
+}
+{% endhighlight %}
 
 
 ## C++11
 
-qwer
+In a contest setting it has at least in the past been rare to have C++11 support.
+However, I imagine the times are changing and C++11 is going to become more and more available in contest settings (especially with the advent of python being available).
+C++11 offers a couple of nice language features that can ease the pain of boilerplate, especially around iterators.
+A competitor needs to keep his wits about him though and no rely on these features as a crutch, otherwise he might find himself without C++11 and needing to know how to write out the type of that `map<string, map<string, int> >` iterator and sub-iterator, as well as what they return and why.
 
+### `auto` Keyword and New For Loop
 
-### `auto` Keyword
+One of the more useful language benefits is the `auto` keyword.
+If you've ever worked in C#, `auto` is more or less your `var`.
+It's type deduction at compile time, where the compiler will figure out (if it can) exactly what type is required for a certain expression without you having to write it out.
 
-qwer
+The new for loop expression is a "for each" loop.
+It works particularly well in conjunction with the auto keyword.
+The syntax is simple enough, instead of the boilerplate of defining your own iterator range, when it ought to stop, and how much to increment it, you tell the compiler you want to touch all the items in a container: `for (auto x : container) { ... }`.
 
+To use the above example:
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+   map<string, int> a1 = { {"b", 2}, {"c", 3} };
+   map<string, int> a2 = { {"b", 4}, {"c", 5} };
+   map<string, map<string, int>> m = { {"a", a1}, {"d", a2} };
+   // pre C++11
+   typedef map<string, map<string, int> >::iterator iter;
+   typedef map<string, int>::iterator subiter;
+   for (iter it = m.begin(); it != m.end(); ++it)
+   {
+      for (subiter sit = it->second.begin(); sit != it->second.end(); ++sit)
+      {
+         cout << it->first << " " << sit->first << " " << sit->second << endl;
+      }
+   }
+   // post C++11
+   for (auto v : m)
+      for (auto x : v.second)
+         cout << v.first << " " << x.first << " " << x.second << endl;
+}
+{% endhighlight %}
+
+As a general rule `auto` should be used to save you time, not because you don't know what type you want.
+However, if you *don't know* and auto helps you tease out what it is, or helps you get the solve, then no one is going to complain during the contest.
+You'll get teased afterwards.
 
 ### Initializer Lists
 
-qwer
+An initializer list is that funny syntax you've seen me use in several examples throughout.
+It's the bracket notion with literals, e.g. `{1, 2, 3}`.
+An initializer list is a convenient way to work with complicated shapes or just pairs of values.
+Although a `make_pair(...)` isn't terribly difficult to do, you can also just `{...}` and throw it in.
 
+Example:
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+   map<int, int> m;
+   map<int, int> answer = { {1, 2}, {3, 4}, {5, 6} };
+   m.insert({1, 2});
+   int x = 3, y = 4, z = 5;
+   m.insert({x, y});
+   m.insert({z, 6});
+   assert(equal(m.begin(), m.end(), answer.begin()));
+}
+{% endhighlight %}
+
+Initializer lists are hit or miss. In the instances where they can be used they're often quite nice, but they're not always supported out of the box and how certain pitfalls.
+You can think of an initializer list as just a range of items that a function call (which accepts an initializer list) will iterate over and attempt to use.
+Because of generality of these algorithms you might run into problems were the compiler complains about requiring explicit construction from the sub-lists in say a `vector<tuple<...>>`.
+In a contest setting it's a double edged sword which could lead to grieve with long compiler errors, but it can also speed up certain scenarios from needing `make_pair()` everywhere.
+My advice is to try it out in a test program if you're not certain how it's going to behave.
 
 ### Lambdas
 
-qwer
+Lambdas are an addition to C++11 that should probably rarely be used in a contest setting.
+However, there are times when you need a function to pass into a STL algorithm, like `generate` or `sort` that we've seen before, and whipping it up in a lambda can be faster than implementing a struct, overloading the call operator, and then going from there (basically a boilerplate lambda).
 
+A lambda expression takes this full form: `[ *capture-list* ] ( *params* ) mutable *exception attribute& -> *return type* { *body* }`.
+However, the entire *params* portion is optional, the `mutable` keyword with *exception attribute* is optional, and the *return type* with it's arrow `->` are also optional.
+These parts aren't independently optional, but the only bits you need to worry about is `mutable` and *return type*.
+If you want to mutate, you need to have a parameter list and return.
+If you want to return, you need to have a parameter list.
+
+The capture list in the lambda expression is to capture variables in the parent scope of the expression that aren't going to be passed in as parameters.
+You could just not capture anything and pass all needed values as parameters, but that would be a bother.
+The capture list can capture by value or by reference, e.g. `[a, &b]` capturing `a` by value and `b` by reference.
+You can automatically capture every variable available to you by reference or by value with `[&]` and `[=]` respectively.
+Asides from that, it's like writing any other kind of function, although you need to end the expression with a semicolon.
+
+Example:
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+   vector<int> v(100);
+   int val = 0;
+   auto generator = [&val] () -> int { return ++val; };
+   auto displayer = [] (int x) { cout << x << " "; };
+   generate(v.begin(), v.end(), generator);
+   for_each(v.begin(), v.end(), displayer);
+   cout << endl;
+}
+{% endhighlight %}
 
 ### Regex
 
-qwer
+A double-edged sword if there ever was one, regex is that fancy regular language with back reference extras that everyone should love and hate equally.
+Especially in a contest setting.
+There are definitely problems were regex is undeniably your friend, and you spent the five minutes getting the expression correct and the problem is just solved.
+However, regex can often be thought of as a one size fits all magic bullet.
+That alone is bad enough, but coupled with overconfidence and you've got wasted time, effort, and a solution that's probably way too slow.
 
+One of the biggest problems with regex solutions is not being able to grasp the runtime complexity as easily as other solutions.
+The runtime complexity is dependent on the implementation under the hood and the features of that implementation you decide to use.
+When you write a regex expression, you're writing a little program in an esoteric language, that makes things harder to understand, harder to implement, and significantly more painful when you discover you don't actually know what the problem is asking.
+
+With all of these downsides, I'll remind you that sometimes regex is just what the doctor ordered.
+Not commonly, but sometimes.
+There is too much detail that needs to be understood about regex for me to elucidate it in an introduction, but suffice to say it is present in C++11, and if you know what you're doing don't be too afraid to use it.
 
 ## General C++ Style
 
-qwer
+There are a view style guidelines what will help you when you're programming in a competitive setting.
+If you've analyzed the code snippets in this post already you may have noticed a couple of interesting thing.
+The first is the include header.
+In every example there is only one include header, `#include <bits/std++.h>`.
+This is a compiler specific header that will include all of the STL headers for you.
+It's uses outside of a competitive setting are for pre-compiled headers, but for us it's a quick way to get everything we're going to want.
+It should be noted again that this header is not part of the standard, and it's possible that a compiler wont support it.
+Most of the time a contest setting is using some variant of gcc in which case it's very likely the header will be supported.
+
+The next tidbit is `using namespace std;` which comes immediately after.
+This statement is to prevent the need to prefix every standard call with `std::`.
+It's just a quick time saver to prevent those same five characters from appearing and reappearing.
+
+A couple of final remarks on style.
+Competitive problems almost always give a bounds on the input variables.
+These bounds are guarantees and do not need to be checked.
+More often than not someone brand new to competitive programming will add `if` statements attempting to confirm these bounds to make sure they're okay without needing to.
+The reverse of that is using the information supplied by the bounds to initialize just enough memory in a convenient and cache efficient static array.
+If you can do this: `int array[10001];` then you should.
+Other minor details are that the `main` function doesn't need arguments or a `return 0;` statement at the end.
 
 
 ## IO Performance
 
-qwer
+Very rarely IO in a problem turns out to be the bottleneck of your solution.
+There are two ways to go about correcting this if you ever suspect it to be the problem:
+
+1. Use C-style IO, with scanf and printf for everything.
+2. Unsync and untie C++ io streams from C io streams.
+
+To go about the second method, you can just add this struct to the top of all of your solutions:
+
+{% highlight c++ %}
+struct iofix {
+   ios_base::Init i;
+   iofix() { cin.sync_with_stdio(0); cin.tie(0); }
+} iofix;
+{% endhighlight %}
 
 
 ## Java
 
-qwer
+C++ is my preferred language of choice for competitive programming.
+That doesn't make Java any worse or any better, it can handle all of the aspects here and perform equally as well in a contest setting.
+That is, of course not to say it's perfect, either.
+It's just different, but there are some undeniable benefits to Java, and that's what this sections is about.
+This section is going to be brief and just hit the bullet points about what Java can do.
 
 
 ### When to Bother
 
-qwer
+Switching from a language you're most comfortable in to a language that you might not have used in years is a big risk, especially in a high stress environment like the last hour of a contest with a proble on the line.
+Being able to weight the benefits for the rewards is the best way to make sure that the right call is made in that stressful moment.
+Going with Java means you have to change paradigms to a language with garbage collection that forces object oriented design principles on you when you just want to write a bloody function.
+Even worse, you're probably going to be working with an old version of Java and not have more of the useful features available to you.
+
+All the same, if the problem your tackling can be solved or greatly assisted by any of: `BigInteger`, `BigDecimal`, `GregorianCalendar`, `Line2D`, `Arc2D`, `Polygon`, or regex (and you don't have c++11), then you should probably choose Java.
+All of these instances are quite rare, and all of them can be solved in c++ land with a little bit of know-how and careful planning.
+Yet, they're all already there in Java, ready and waiting.
 
 
 ### BigInteger and BigDecimal
 
-qwer
-
+The arbitrary arithmetic helper classes `BigInteger` and `BigDecimal` in Java can outright solve some otherwise difficult math problems.
+It is incredibly rare (verging on non-existent) for the intended solution to a problem to require arbitrary precision arithmetic.
+There are however problems, like computing factorials, which can be "cheesed" with `BigInteger`.
+There are also instances of testing primality of a large integers which can be "chessed" with probabilistic algorithms (already present in `BigInteger`).
+These are bother risky prospects, because an astute and determined problem writer is either going to concede that these are proper solutions or guarantee they'll fail.
+In the heat of the moment, though, if you don't know the correct solution, but you know how to solve it with these classes, then go for it.
 
 ### GregorianCalendar
 
-qwer
+A Gregorian calendar is the fancy name for the calendar that just about everyone across the world uses.
+Just about as rarely as intentional arbitrary arithmetic problems, you'll get a problem that deals with large spans of time over a calendar year that expects you to handle all the little details.
+This is arguably easier to handle in C++ if you already know some formulas to generate a calendar and manipulate it, but if you don't, you're probably out of luck.
 
+Enter `GregorianCalendar`, a concrete implementation of an every day calendar.
+There are some hang ups to using this class, mostly being accustom to using it.
+It's unlikely for anyone to expect you to memorize the Java `GregorianCalendar` object and how to use it, so what you should expect is for it to show up in your reference material.
+From there, you can figure out how exactly to use it and solve that quirky calendar problem without too much worry.
 
 ### Geometry
 
-qwer
+Geometry is probably the best example of what can be gained from switching to Java.
+Rarely is there an "easy" geometry problem that can't be solved with some quick math, but geometry problems can run the gambit from easy to impossible.
+Throughout all possibilities, it's definitely nice not having to implement your own line class and intersect function.
+If you've got a math guy with you who knows how to use `complex<T>` in C++ as a two dimensional vector and can derive the problem, then let him have it.
+Otherwise, it can't hurt to switch over and utilize all those handy geometric objects and associated functions to get a solve on that otherwise time consuming geometry problem.
 
 
 ### Regex
 
-qwer
+Much like the section on C++11 regex, all the same dos and do nots apply.
+If you find yourself in need of a regex library, and also don't have C++11 available, then Java has come to the rescue.
+I'll reiterate, make sure you know what you're doing.
+Make sure you know what you're doing.
+Make sure the problem *actually calls for regex* and you're not taking a sledge hammer to a screw.
 
 
 ## Final Tips
 
-qwer
+Breathe, relax, have fun, and make sure to print out and build a binder or some kind of reference material out of anything you know you're going to forget but will probably need.
+In almost any off-line contest you're allowed any written material you can carry!
+Make a template file with all of your headers, needed functions, macros, or what have you.
+You don't have to make it instantly, but if there is a lull have someone work it out so you don't have to redo the work.
+The template doesn't have to be just for C++ either, a quick an easy Java template can't hurt in a lull period either.
+
+My C++ template (as of today):
+
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+struct iofix
+{
+   ios_base::Init i;
+   iofix() {
+      cin.sync_with_stdio(0);
+      cin.tie(0);
+   }
+} iofix;
+
+typedef int i32;
+typedef long long i64;
+typedef unsigned int u32;
+typedef unsigned long long u64;
+
+int main()
+{
+
+   return 0;
+}
+{% endhighlight %}
