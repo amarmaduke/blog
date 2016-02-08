@@ -1,0 +1,31 @@
+---
+layout: post
+title:  "Computational Complexity Theory and Heuristics"
+date:   2016-02-08 02:20:00 -0500
+permalink: /:categories/:title.html
+---
+
+- Introduction to Computational Complexity Theory
+- The Complexity Hierarchy
+- Determining Time and Space Complexity
+- Heuristics Using Problem Bounds
+{:toc}
+
+Use Sispler and Barak as references here
+
+## Introduction to Computational Complexity Theory
+definitions, motivations, some proofs?
+
+## The Complexity Hierarchy
+expand on what's the fastest, what's the slowest
+
+## Determining Time and Space Complexity
+some examples to figure out the complexity of stuff
+
+## Heuristics Using Problem Bounds
+here is how you know if something is fast enough sometimes! {% cite ruby %}
+
+References
+----------
+
+{% bibliography %}
