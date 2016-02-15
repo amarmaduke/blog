@@ -16,13 +16,40 @@ Use Sispler and Barak as references here
 ## Introduction to Computational Complexity Theory
 definitions, motivations, some proofs?
 
+### Asymptotic Analysis
+
+define Big O notation:
+Given f and g, f = O(g) if there exists c and n_0 such that for all n >= n_0
+we have f <= cg.
+
+Properties of big O notation:
+absorption of smaller complexities, and constant multipliers
+
+What kind of functions do we use when describing big O notation?
+
 ## The Complexity Hierarchy
 expand on what's the fastest, what's the slowest
+Give maybe a table or some graphs of given time complexities
+
+O(logn), O(n), O(nlogn), O(n^2), O(n^3), O(2^n), O(n!)
+numbers and such (possible graphic)?
+
+cite sispler for more information on hierarchies
 
 ## Determining Time and Space Complexity
 some examples to figure out the complexity of stuff
 
+graphic?
+n^2 for loop,
+n^2 for loop in n x n /2
+n^2 for loop in n x logn
+
+more examples, tower of hanoi? or other permutation examples to get n!
+
 ## Heuristics Using Problem Bounds
+computing upper bound "instructions"
+about how many "instructions" can you handle?
+
 here is how you know if something is fast enough sometimes! {% cite ruby %}
 
 References
