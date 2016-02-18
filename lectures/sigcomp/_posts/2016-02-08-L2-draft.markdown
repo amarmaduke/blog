@@ -1,12 +1,12 @@
 ---
 layout: post
 title:  "Computational Complexity Theory and Heuristics"
-date:   2017-02-08 02:20:00 -0500
+date:   2014-02-08 02:20:00 -0500
 permalink: /:categories/:title.html
 ---
 
 - Introduction to Computational Complexity Theory
-- The Complexity Hierarchy
+- The Pragmatic Hierarchy
 - Determining Time and Space Complexity
 - Heuristics Using Problem Bounds
 {:toc}
@@ -14,30 +14,306 @@ permalink: /:categories/:title.html
 Use Sispler and Barak as references here
 
 ## Introduction to Computational Complexity Theory
-definitions, motivations, some proofs?
+During a competitive programming contest, much like in the real world, there is often the question of "is this fast enough?"
+The creative process of finding a solution in its entirety might go something like this:
+
+* Do I understand the problem?
+* Can I demonstrate that the problem is solvable at all? In general?
+* Can I find a solution?
+* Is my solution practical enough (under realistic resource constraints)?
+* Can I find a better solution?
+
+In a contest this process is simplified somewhat.
+First we clearly do need to understand what it is we're trying to solve, but we don't need to worry ourselves with whether or not it is solvable.
+Indeed, in most practical real world cases it's fine to assume that the problem your working on is solvable.
+If it's not solvable then it's likely a very well known problem (e.g. the Halting Problem) and you'll discover that fact quickly enough.
+Finding a solution has some friction, it requires a certain amount of ingenuity and just brute knowledge to draw from.
+Yet, once you have a solution, any solution, the problem remains of whether or not it's practical.
+A vague idea of _practical_ is if the solution produces the correct answer for the associated inputs in a sufficient amount of time and memory.
+We could also consider code size in relation to maintaining the software in the future but for the purposes here we're only interested in time, space, and perhaps error practicality.
+
+Consider this, (C++11)
+
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+
+int solve(int n) {
+   return n == 0 ? 1 : solve(max(n - 1, 0)) + solve(max(n - 2,0));
+}
+
+int main() {
+   for (unsigned i = 0; i <= 45; ++i) {
+      auto start = chrono::high_resolution_clock::now();
+      int result = solve(i);
+      auto end = chrono::high_resolution_clock::now();
+      auto ms =
+         chrono::duration_cast<chrono::microseconds>(end - start).count();
+      auto s =
+         chrono::duration_cast<chrono::seconds>(end - start).count();
+      cout << i << ": " << result
+         << " in " << ms << " ms, " << s << " s" << endl;
+   }
+}
+{% endhighlight %}
+
+This recursive solution to computing the Fibonacci sequence can really churn them out.
+In fact, if you only cared about the first twenty Fibonacci numbers this might just be fast enough.
+Unfortunately, there are two very impractical things about this code.
+Do you think you know?
+They're both obvious if you execute the program and wait for it terminate (it takes about a minute).
+Figure it out?
+It's too slow, and the datum used (a likely 32-bit integer) is too small so it overflows.
+These problems can be thought of as a time constraint and an error constraint.
+Although error constraints are usually thought of in terms of floating point arithmetic the idea is the same: "Is my machine representation of this mathematical value sufficient to produce the approximately correct output?"
+In this case, the answer is a clear no, a Fibonacci number should never be negative.
+
+Consider this altered version,
+
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long i64;
+
+map<int, i64> memo;
+
+int solve(int n) {
+   if (n == 0 or n == 1) return 1;
+   i64 first = memo[n - 1] != 0 ? memo[n - 1] : solve(n - 1);
+   i64 second = memo[n - 2] != 0 ? memo[n - 2] : solve(n - 2);
+   memo[n] = first + second;
+   return first + second;
+}
+
+int main() {
+   for (int i = 0; i <= 46; ++i) {
+      auto start = chrono::high_resolution_clock::now();
+      i64 result = solve(i);
+      auto end = chrono::high_resolution_clock::now();
+      auto ms =
+         chrono::duration_cast<chrono::microseconds>(end - start).count();
+      auto s =
+         chrono::duration_cast<chrono::seconds>(end - start).count();
+      cout << i << ": " << result
+         << " in " << ms << " ms, " << s << " s" << endl;
+   }
+}
+{% endhighlight %}
+
+Now, instead of recomputing values we store the values we already computed in memory.
+We can think about this as if the computer has _learned_ that input and so should be able to recall it from memory.
+This strategy is also called Dynamic Programming (DP), where we prove to ourselves that we can break the problem into sub problems that appear in the main problem sufficiently often.
+The trade off here is that we're using more memory than before, we have to store a 64-bit integer for every value of the Fibonacci sequence that we want.
+However, even a 64-bit integer doesn't seem to do us much good when it comes to error constraints.
+We only managed to be able to compute one additional Fibonacci number.
+
+Consider this final version,
+
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<bool> operator+(const vector<bool> &a, const vector<bool> &b) {
+   size_t N = max(a.size(), b.size());
+   size_t n = min(a.size(), b.size());
+   vector<bool> result(N + 1, false);
+   bool carry = false;
+   for (size_t i = 0; i < n; ++i) {
+      bool a_i = a[i], b_i = b[i];
+      bool val = carry xor (a_i xor b_i);
+      result[i] = val;
+      if (not carry and (a_i and b_i)) carry = true;
+      else if (carry and (a_i or b_i)) carry = true;
+      else carry = false;
+   }
+   for (size_t i = n; i < N; ++i) {
+      bool val;
+      if (a.size() > b.size()) val = a[i]; else val = b[i];
+      result[i] = carry xor val;
+      carry = carry and val;
+   }
+   result[N] = carry;
+   return result;
+}
+
+string strify(const vector<bool> &v) {
+   string tmp = "";
+   for (int i = 0; i < v.size(); ++i) {
+      if (v[i]) tmp += "1"; else tmp += "0";
+   }
+   reverse(tmp.begin(), tmp.end());
+   string result = "";
+   bool leading = true;
+   for (int i = 0; i < tmp.size(); ++i) {
+      if (tmp[i] == '1') leading = false;
+      if (not leading) result += tmp[i];
+   }
+   return result;
+}
+
+typedef vector<bool> integer;
+map<int, integer> memo;
+
+integer solve(int n) {
+   if (n == 0 or n == 1) return integer(1, 1);
+   integer first = memo.count(n - 1) != 0 ? memo[n - 1] : solve(n - 1);
+   integer second = memo.count(n - 2) != 0 ? memo[n - 2] : solve(n - 2);
+   memo[n] = first + second;
+   return first + second;
+}
+
+int main() {
+
+   auto test = integer(1, 1);
+   auto ret = test + test;
+   cout << strify(ret) << endl;
+
+   for (int i = 0; i <= 1000; ++i) {
+      auto start = chrono::high_resolution_clock::now();
+      integer result = solve(i);
+      auto end = chrono::high_resolution_clock::now();
+      string output = strify(result);
+      auto ms =
+         chrono::duration_cast<chrono::microseconds>(end - start).count();
+      auto s =
+         chrono::duration_cast<chrono::seconds>(end - start).count();
+      cout << i << ": " << output
+         << " in " << ms << " ms, " << s << " s" << endl;
+   }
+}
+{% endhighlight %}
+
+In the real world you don't want to be implementing your own arbitrary sized integers.
+Even in a competitive programming contest, you're better off just switching over to Java and using `BigInteger`, but I started with C++ so I decided to end with it.
+This code shifts to an arbitrary sized integer which uses `vector<bool>` as its backing store.
+It should be noted that `vector<bool>` has some special semantics and it's debatable whether you should even consider it a "container of bool", but we're not using it as a container just as a convenient method of abstracting a contiguous sequence of bits.
+With that in mind, all we need is addition and a way to print it, and we're off.
+All of our error constraints are mostly satisfied.
+The only possible problem is if we run out of memory.
+We've traded memory for speed and precision.
+Although this implementation could be significantly optimized it still severely out performs the other two implementations.
+We can now print out a thousand unique Fibonacci numbers with ease.
+
+The question now becomes, how did we know what to improve?
+How did we know the bottlenecks?
+The answer lies in something called Computational Complexity Theory.
+The idea is to obtain a measurement of how an algorithm scales with respect to some variable.
+This scaling helps us build an intuition of how fast something is, where we might need to direct our attention for improvement, and just how good our improvements really are.
+We'll learn more than just how things perform at scale though, in competitive programming it is useful to know when you can get by with "just enough".
+For that we need to learn a couple other tricks.
 
 ### Asymptotic Analysis
 
-define Big O notation:
-Given f and g, f = O(g) if there exists c and n_0 such that for all n >= n_0
-we have f <= cg.
+<div class="definition">
+Given functions \(f : Params \to \mathbb{R}\) and \(g : Params \to \mathbb{R}\) with some shared parameter space \(Params\), then we say \(f\) is in the \(\textit{complexity class}\) \(\mathcal{O}(g)\), \(f \in \mathcal{O}(g)\), if there exists \(c : \mathbb{R}\) and parameters \(n_0, n_1, \cdots, n_k : Params\) for finite \(k\) such that \(\forall m_i \geq n_i\) we have \(f(m_0, \cdots, m_k) \leq cg(m_0, \cdots, m_k)\).
+</div>
 
-Properties of big O notation:
-absorption of smaller complexities, and constant multipliers
+This definition is trying to convey a simple idea.
+If we have two functions that measure how much time it takes for a program to do something then if one of those measurements is always smaller than a constant times the other after some fixed parameter input then that smaller measurement is in the $$\textit{complexity class}$$ of the larger measurement.
 
-What kind of functions do we use when describing big O notation?
+Consider the following two functions, $$f(n) = 2n^2$$ and $$g(n) = n^2$$, with one parameter $$n$$ the size of the input.
+It might seem strange at first but we can show $$f \in \mathcal{O}(n^2)$$.
+This is easy enough to prove, select $$c = 3, n_0 = 0$$ and it's trivial.
+Why would we want to do this?
+Because we only want to remember a select view complexity classes.
+The point of this analysis is to convey a lot of information about the scaling of our algorithm very quickly.
+To that effect we want to ignore lower ordered terms and constant multipliers.
 
-## The Complexity Hierarchy
-expand on what's the fastest, what's the slowest
-Give maybe a table or some graphs of given time complexities
+What is meant by lower ordered terms?
+A lower ordered term is any part of the function, separated by addition, whose contribution is dominated by some other term.
+Consider $$f(n) = n^2 + n + 1$$.
+If you're keen enough, you should be able to prove $$f \in \mathcal{O}(n^2)$$.
+This is very useful, we can ignore parts of the computation that don't play a role at scale.
+We have a quick and effective method of determining the practicality of our algorithm.
 
-O(logn), O(n), O(nlogn), O(n^2), O(n^3), O(2^n), O(n!)
-numbers and such (possible graphic)?
+This kind of notation to express complexity classes is called Big-O notation.
 
-cite sispler for more information on hierarchies
+Here are some properties of Big-O:
+
+1. $$\mathcal{O}(cf) = \mathcal{O}(f),~\forall c : \mathbb{R}$$
+2. $$\mathcal{O}(n^k + n^{k-1} + \cdots + n + 1) = \mathcal{O}(n^k),~\forall~ \mbox{finite}~k$$
+3. $$f \in \mathcal{O}(g) \implies \mathcal{O}(g + cf) = \mathcal{O}(g),~\forall c : \mathbb{R}$$
+
+
+### The Constant Matters
+
+There is one lie I've told that I should make clear.
+For any algorithm there is always a constant multiplier on it's largest contributing term.
+Even if this constant is just one, there is always some constant.
+Big-O notation hides away this constant because it shouldn't matter at scale, but in practice it matters.
+Because we're taking a pragmatic approach we sometimes need to figure out that constant and use it to aid us in determining if our algorithm is good enough.
+
+More often than not the constant really doesn't matter.
+Your algorithm is plenty fast enough and the constant is probably less than or equal to five or some small value.
+However, there are some algorithms were the constant is so large that the parameters would have to, in turn, be so large to see a benefit that the algorithm is impractical.
+For that reason you should at least keep in mind that the constant can, and does, matter.
+
+## The Pragmatic Hierarchy
+
+If you'd like to learn more about the background and theory involved with Big-O notation, Computation Complexity Theory, and Complexity Theory then I encourage you to pick up and read {% cite Sisper2006 %} and {% cite Arora2009 %}.
+Both texts will also discuss the Complexity Hierarchy and you'll learn plenty about $$P \stackrel{?}{=} NP$$ and other hard questions.
+However, we're going to discuss a different kind of hierarchy.
+
+Listed in order of fastest to slowest:
+
+1. $$\mathcal{O}(1)$$
+2. $$\mathcal{O}(\log(n))$$
+3. $$\mathcal{O}(n)$$
+4. $$\mathcal{O}(n\log(n))$$
+5. $$\mathcal{O}(n^2)$$
+6. $$\mathcal{O}(n^3)$$
+7. $$\mathcal{O}(2^n)$$
+8. $$\mathcal{O}(n!)$$
+
+Each smaller complexity class can be said to be "in" any of the larger ones.
+This is an absorption property of very large complexity classes, but the utility comes in determining the smallest such complexity class that your algorithm is "in".
+With the smallest appropriate complexity class chosen you can compare it to other possible ones.
+If your algorithm is $$\mathcal{O}(n^2)$$ but your partners is $$\mathcal{O}(n)$$, then after some vetting of correctness you should go with your partners approach.
+Knowing this hierarchy gives you the freedom of easily choosing between potential algorithms to know which one is going to be fast enough.
+
+TODO: Could use some plots to show off here
 
 ## Determining Time and Space Complexity
-some examples to figure out the complexity of stuff
+
+Knowing the theory is important in order to apply it, but you also have know how to apply it.
+Time complexity is the most important measurement because it is the most heavily constrained resource.
+Time is money.
+In the real world, especially on embedded systems, things like space complexity could become a much more important factor, but our target is the competitive programming scene.
+Error complexity is incredibly important (almost more so than time complexity) in numerical computation.
+Who cares how fast your algorithm is if it isn't approximately correct to some error tolerance?
+These kinds of problems do show up in contests but we can usually rest easy just by using `double`, and worst case by implementing our own ratio class.
+
+The question remains, how do we determine complexity?
+
+Consider the following three algorithms:
+
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+   int n = 1000;
+
+   int acc1 = 0, acc2 = 0, acc3 = 0;
+   for (int i = 0; i < n; ++i)
+      for (int j = 0; j < n; ++j)
+         ++acc1;
+
+   for (int i = 0; i < n; ++i)
+      for (int j = i + 1; j < n; ++j)
+         ++acc2;
+
+   for (int i = 0; i < n; ++i)
+      for (int j = 0; j < log(n); ++j)
+         ++acc3;
+
+   cout << acc1 << " " << acc2 << " " << acc3 << endl;
+}
+{% endhighlight %}
+
+There are three separate sections with two for-loops, one nested in the other.
+What is the time complexity of each of these sections?
 
 graphic?
 n^2 for loop,
@@ -52,7 +328,6 @@ about how many "instructions" can you handle?
 
 here is how you know if something is fast enough sometimes! {% cite ruby %}
 
-References
-----------
+## References
 
 {% bibliography %}
