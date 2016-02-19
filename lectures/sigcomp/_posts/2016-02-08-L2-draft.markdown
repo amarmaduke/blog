@@ -301,11 +301,11 @@ int main() {
          ++acc1;
 
    for (int i = 0; i < n; ++i)
-      for (int j = i + 1; j < n; ++j)
+      for (int j = 0; j < n - i; ++j)
          ++acc2;
 
    for (int i = 0; i < n; ++i)
-      for (int j = 0; j < log(n); ++j)
+      for (int j = 0; j < floor(log(n)); ++j)
          ++acc3;
 
    cout << acc1 << " " << acc2 << " " << acc3 << endl;
@@ -314,6 +314,8 @@ int main() {
 
 There are three separate sections with two for-loops, one nested in the other.
 What is the time complexity of each of these sections?
+
+<svg id="fig1" width="800" height="200"></svg>
 
 graphic?
 n^2 for loop,
@@ -331,3 +333,104 @@ here is how you know if something is fast enough sometimes! {% cite ruby %}
 ## References
 
 {% bibliography %}
+
+<script>
+var paper = Snap("#fig1");
+
+var px = 600; var py = 80;
+var pressed = 0;
+var button = paper.polygon([px, py, px, py + 40, px + 25, py + 20])
+var set = Snap([]);
+
+var data = [];
+var n = 8;
+var speed = 250;
+var idx = 0;
+
+paper.text(25, 50 + 60, "n");
+paper.text(240 - 25, 50 + 60, "n");
+paper.text(430 - 25, 50 + 60, "n");
+paper.text(100, 35, "n");
+paper.text(240 + 40, 35, "n - i");
+paper.text(430 + 35 , 35, "log(n)");
+
+for (i = 0; i < n; ++i)
+   for (j = 0; j < n; ++j)
+      set.push(paper.circle(50 + 15*j, 50 + 15*i, 5));
+for (i = 0; i < n; ++i)
+   for (j = 0; j < n; ++ j)
+      set.push(paper.circle(240 + 15*j, 50 + 15*i, 5));
+for (i = 0; i < n; ++i)
+   for (j = 0; j < n; ++ j)
+      set.push(paper.circle(430 + 15*j, 50 + 15*i, 5));
+
+for (i = 0; i < n; ++i) {
+   for (j = 0; j < n; ++j) {
+      var frame = [];
+      var k = i*n + j;
+
+      var tmp = 0;
+      for (u = 0; u < n; ++u) {
+         for (v = 0; v < n; ++v) {
+            if (tmp > k)
+               frame.push([{fill: '#000000'}, speed]);
+            else
+               frame.push([{fill: '#bada55'}, speed]);
+            ++tmp;
+         }
+      }
+
+      tmp = 0;
+      for (u = 0; u < n; ++u) {
+         for (v = 0; v < n - u; ++v) {
+            if (tmp > k)
+               frame.push([{fill: '#000000'}, speed]);
+            else
+               frame.push([{fill: '#bada55'}, speed]);
+            ++tmp;
+         }
+         for (v = n - u; v < n; ++v) {
+            frame.push([{fill: '#000000'}, speed]);
+         }
+      }
+
+      tmp = 0;
+      for (u = 0; u < n; ++u) {
+         var ln = Math.floor(Math.log(n));
+         for (v = 0; v < ln; ++v) {
+            if (tmp > k)
+               frame.push([{fill: '#000000'}, speed]);
+            else
+               frame.push([{fill: '#bada55'}, speed]);
+            ++tmp;
+         }
+         for (v = ln; v < n; ++v) {
+            frame.push([{fill: '#000000'}, speed]);
+         }
+      }
+
+      if (k + 1 != n*n) {
+         frame[frame.length - 1].push(function() { loop(); });
+      } else {
+         frame[frame.length - 1].push(function() { pressed = 0; });
+      }
+      data.push(frame);
+   }
+}
+
+var loop = function() { set.animate(...next_frame(++idx)); };
+var next_frame = function(i) {
+   return data[i];
+};
+
+var click = function(event) {
+   if (pressed == 0) {
+      idx = 0;
+      pressed = 1;
+      set.animate(...next_frame(0));
+   }
+};
+
+button.click(click);
+
+</script>
