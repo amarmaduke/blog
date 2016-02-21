@@ -314,21 +314,85 @@ int main() {
 
 There are three separate sections with two for-loops, one nested in the other.
 What is the time complexity of each of these sections?
+Play the graphic below to gain some insight:
 
 <svg id="fig1" width="800" height="200"></svg>
 
-graphic?
-n^2 for loop,
-n^2 for loop in n x n /2
-n^2 for loop in n x logn
+The leftmost grid is doing $$n \times n$$ steps, the middle is doing about half as many steps as the leftmost, and the rightmost is doing $$n \times \log(n)$$ steps.
+To represent the time complexity we would say the algorithms are $$\mathcal{O}(n^2)$$, $$\mathcal{O}(n^2)$$, and $$\mathcal{O}(n\log(n))$$ respectively.
+It's true that the middle grid is taking a constant factor less steps, but remember that Big-O notation does not capture that constant multiplier.
 
-more examples, tower of hanoi? or other permutation examples to get n!
+A good rule for determining complexity is just counting nested loops.
+If you have three nested loops that go from 0 to some variable(s) (let's say $$n$$, $$m$$, and $$q$$) then a safe first case is $$\mathcal{O}(nmq)$$.
+If $$n = \max(n, m, q)$$ then you could also express this as $$\mathcal{O}(n^3)$$.
+While that kind of simplification to the largest growing variable might be helpful to convey intent in some cases, it can hurt you in others.
+
+Consider the problem of finding the maximum element in an array of length $$n$$ for $$q$$ queries that define a sub-array.
+Assuming the queries define a set of indices one approach is to scan from the leftmost to rightmost index and track the maximum value along the way.
+Suppose the size of the array can be very large, but the number of queries (perhaps per second) is relatively small.
+If we only need to do ten queries a second then a $$\mathcal{O}(nq)$$ approach might be perfectly fine.
+However, an oversimplification to $$\mathcal{O}(n^2)$$ could trick us into thinking our algorithm isn't good enough when it might clearly be.
+
+### Counting Principles
+<div class="definition">
+A \(\textit{permutation}\) of a sequence \(S\) is a reordering of its elements.
+</div>
+
+<div class="definition">
+A \(\textit{permutation with repetition}\) or \(word\) of some alphabet is a selection of \(n\) elements from a sequence or alphabet \(S\) where the same element may be selected arbitrarily many times to form a new sequence \(S'\).
+</div>
+
+<div class="definition">
+A \(\textit{combination}\) is a selection of \(k\) distinct elements from a set \(S\) which form a subset of \(S\).
+</div>
+
+<div class="definition">
+A \(\textit{combination with repetition}\) is a selection of \(k\) elements from a set \(S\) which form a multiset \(M\).
+</div>
+
+These are the four useful methods of counting that can be categorized usefully and applied effectively to determine computational complexities.
+
+|                 ||Ordered           ||Unordered
+|                 ++------------------++-------------------
+|**Repetition**   ||permutation w/ rep||combination w/ rep
+|**No Repetition**||permutation       ||combination
+
+
+If you encounter a counting problem that you can determine requires an ordering of the elements without repetition, then you know it's a permutation.
+
+So how does one compute these?
+
+A permutation of a sequence of length $$n$$ is $$n!$$ or $$n(n-1)(n-2)\cdots(2)(1)$$.
+
+A permutation of a sequence of length $$n$$ where you are only wish to permute to a subsequence of length $$k$$, $$k \leq n$$ is $$\frac{n!}{(n-k)!}$$.
+This can be called a $$\textit{k-permutation of n}$$.
+
+A permutation with repetition of a sequence of length $$n$$ with $$k$$ distinct elements is $$k^n$$.
+
+A combination of a set with $$n$$ elements of which $$k$$ are to be selected is $$\left(n \atop k\right) = \frac{n!}{k!(n-k)!}$$.
+Generally when we speak about combinations we say *n choose k* and write it $$\left( n \atop k \right)$$.
+
+A combination with repetition of a set with $$n$$ elements of which $$k$$ are to be selected is $$\left(\left( n \atop k \right)\right) = \left( {n + k - 1} \atop k\right)$$.
+
+Sometimes a problem will be glaringly obvious that it wants you to work with permutations of say a string.
+Sometimes, you can just generate all the permutations via `next_permutation` in the C++ Standard Template Library and perform a complete search in $$\mathcal{O}(n!)$$.
+However, that is for us to be considered just about the *worst* you could do.
+If it works, it works, but that problem could also be conveying that you need a clever solution and a complete search of the permutations isn't going to cut it.
+
+### Examples
+
+Let's return to computing the Fibonacci sequence.
+In the first code sample provided on this topic we used a recursive function to search down until we bottomed out at $$n = 0 or 1$$ which returned $$1$$ and then unraveled the recursion back up.
+For a given index of the Fibonacci sequence $$n$$, what is the time complexity of computing the nth Fibonacci number using this method?
+
+
+
 
 ## Heuristics Using Problem Bounds
 computing upper bound "instructions"
 about how many "instructions" can you handle?
 
-here is how you know if something is fast enough sometimes! {% cite ruby %}
+here is how you know if something is fast enough sometimes!
 
 ## References
 
