@@ -385,14 +385,87 @@ Let's return to computing the Fibonacci sequence.
 In the first code sample provided on this topic we used a recursive function to search down until we bottomed out at $$n = 0 or 1$$ which returned $$1$$ and then unraveled the recursion back up.
 For a given index of the Fibonacci sequence $$n$$, what is the time complexity of computing the nth Fibonacci number using this method?
 
+There are two methods to go about this, one is a heuristic approach, the other is from a generating function.
+Consider writing out a tree of execution.
+First, you'll have Fib(n) (assuming Fib is our recursive function).
+Then, one depth lower, you'll have Fib(n-1) and Fib(n-2).
+Following that, you'll have Fib(n-2), Fib(n-3), Fib(n-3), and Fib(n-4).
+There are two necessary observations to get at a heuristic time complexity.
+The first observation is that the width of the tree is doubling at each successive depth.
+The second observation is that the height of the tree is n.
+This can be seen by the fact that the always-left recursive path is rooted at Fib(n) and most recurse one step at a time from Fib(n) to Fib(n-1) to ... to Fib(1).
+With these observations the number of nodes (and thus computations) is $$\mathcal{O}(2^n)$$.
+
+There are a couple of lies though in the above approach.
+The first lie is that the tree is complete.
+If the tree is complete, then it is indeed the cast that you have $$2^n$$ nodes and thus the correct time complexity, but in our case there is no reason to believe that it is.
+This gets back to a concept we discussed before, Big-O notation is about upper bounds, *but* we want to make those upper bounds as *sharp* as possible.
+A *sharp* upper bound is also called the *least* upper bound, it is the complexity class that precisely describes the worst case performance where no other complexity class could still be an upper bound but be absorbed by it.
+That is to say, if $$\mathcal{O}(f)$$ is a sharp upper bound, and $$\mathcal{O}(g)$$ is any other upper bound, then either $$\mathcal{O}(f) = \mathcal{O}(g)$$ or $$\mathcal{O}(f) \in \mathcal{O}(g)$$.
+
+This heuristic reason is good enough in a contest setting most of the time, but as a matter of exposition, how can we do better?
+Consider $$T(n)$$ to be a function that computes the time taken to compute Fib(n).
+Then, $$T(n) = T(n-1) + T(n-2) + O(1)$$.
+The constant factor can be ignored, and we have a linear recurrence relation:
+$$T_n = T_{n-1} + T_{n-2}$$.
+Here is the trick.
+A linear recurrence relation takes the following form: $$a_n = c_{n-1}a_{n-1} + c_{n-2}a_{n-2} + \cdots + c_{1}a_{1} + c_0a_0$$ with $$c_i : \mathbb{R}$$ for $$0 \leq i < n$$.
+Any linear recurrence relation can be solved by taking the following assumption: $$a_n = \alpha^n$$.
+Where $$\alpha^n$$ is called a *generation function*, or sometimes an *ansatz*.
+Plug in the generation function into the recurrence relation, simplify to a polynomial, solve for the roots, and then the answer is the sum of those $$\alpha$$ values times constant multipliers (in general).
+Quickly here it is for the Fibonacci recurrence relation (which just so happens to be the $$T_n$$ recurrence relation as well):
+
+$$T_n = T_{n-1} + T_{n-2}$$
+
+$$\alpha^n = \alpha^{n-1} + \alpha^{n-2}$$
+
+$$\alpha^2 = \alpha + 1$$
+
+$$\alpha - \alpha - 1 = 0$$
+
+$$\alpha = \frac{1 + \sqrt{5}}{2}, \frac{1 - \sqrt{5}}{2}$$
+
+$$T_n = c_1(\frac{1 + \sqrt{5}}{2})^n + c_2(\frac{1 - \sqrt{5}}{2})^n$$
+
+From there, you can use the initial conditions $$T_0 = T_1 = 1$$ to determine the constant values and then you have your Big-O time complexity, which is approximately $$\mathcal{O}(1.6^n)$$. That's a lot of extra work just to confirm that the time complexity is exponential, but you learned something. As an interesting aside, this exact approach works for linear ordinary differential equations, they just use a different generating function, $$e^{nx}$$.
+
+Needless to say an exponential time complexity is horrible.
+As you also know, we can do a lot better, what exactly happens in the second code sample?
+As it turns out, you end up recomputing a lot of Fibonacci numbers in the recurssive approach.
+If we can have the machine "learn" or "remember" those values, then the time complexity to "recall" the values would be $$\mathcal{O}(1)$$.
+If you imagine taking the always-left recursive path down the binary tree discussed before, but then memorize results on the way up, then you never end up taking any other path except to realize you memorized it.
+That means our time complexity is $$\mathcal{O}(n)$$ for the second code sample.
+An incredible improvement, and with the aid of Big-O notation you can see precisely why.
+
 
 
 
 ## Heuristics Using Problem Bounds
-computing upper bound "instructions"
-about how many "instructions" can you handle?
+Big-O notation offers us a powerful way to determine time complexity at scale, and with the constant multiplier we can do decently well at lower values as well.
+However, in a competitive setting, there additional information which is crucial in determining if your solution will work.
+Almost every problem will incorporate some kind of variable bound.
+Whether it's on the size of an array, the number of vertices, or what have you.
 
-here is how you know if something is fast enough sometimes!
+Consider the following problem:
+Compute the sum from $$1$$ to $$n$$ and output that sum modulo $$2^{19} - 1$$ in less than one second, where $$2 \leq n \leq 10^{10}$$.
+
+Let's try a naive solution:
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+unsigned long long modulo = (1 << 19) - 1;
+int main() {
+   unsigned long long n;
+   cin >> n;
+   unsigned long long result = 0;
+   for (unsigned long long i = 1; i <= n; ++i) {
+     result = (result + i) % modulo;
+   }
+   cout << result << endl;
+}
+{% endhighlight %}
+
+
 
 ## References
 
