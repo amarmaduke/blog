@@ -17,3 +17,6 @@ twitter_username: numbergames
 
 # Build settings
 markdown: kramdown
+
+# Exclusions
+exclude: [visualizations]

@@ -11,7 +11,8 @@ permalink: /:categories/:title.html
 - Heuristics Using Problem Bounds
 {:toc}
 
-Use Sispler and Barak as references here
+This post assumes you are familiar with it's predecessor, [Lecture One](L1-competitive-cpp-and-java.html).
+We will be using shortcuts discussed in that post like `#include<bits/stdc++.h` which may or may not work with your particular compiler.
 
 ## Introduction to Computational Complexity Theory
 During a competitive programming contest, much like in the real world, there is often the question of "is this fast enough?"
@@ -272,7 +273,7 @@ With the smallest appropriate complexity class chosen you can compare it to othe
 If your algorithm is $$\mathcal{O}(n^2)$$ but your partners is $$\mathcal{O}(n)$$, then after some vetting of correctness you should go with your partners approach.
 Knowing this hierarchy gives you the freedom of easily choosing between potential algorithms to know which one is going to be fast enough.
 
-TODO: Could use some plots to show off here
+![plots](/img/lectures/sigcomp/bigoplots.svg)
 
 ## Determining Time and Space Complexity
 
@@ -437,6 +438,78 @@ If you imagine taking the always-left recursive path down the binary tree discus
 That means our time complexity is $$\mathcal{O}(n)$$ for the second code sample.
 An incredible improvement, and with the aid of Big-O notation you can see precisely why.
 
+As a next example let's us a problem from [Codeforces](http://codeforces.com).
+The problem will be [Lucky Numbers](http://codeforces.com/problemset/problem/630/C).
+Here is a brief description:
+
+A new office has its doors numbered with lucky numbers.
+A lucky number is a number with only 7 or 8 as a digit.
+A doorplate on an office door can only hold $$n$$ digits.
+What is the maximum number of office doors, assuming they are all lucky numbers, that the new office can have?
+The input is one number, $$n$$ ($$1 \leq n \leq 55$$), the output should be one number, the maximum number of offices.
+The problem must be solved in less than half a second with less than 64 megabytes of space used.
+
+A first naive approach could be the following:
+Generate all the lucky numbers in lexicographical order until you reach a number whose digit length is greater than $$n$$,  output the total count.
+
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long i64;
+
+int gen(int n) {
+   i64 result = 0;
+   for (int i = 0; i <= n; ++i) {
+      vector<i64> v(n, 7);
+      for (int j = 0, k = v.size() - 1; j < i; ++j, --k) {
+         v[k] = 8;
+      }
+      do ++result;
+      while (next_permutation(v.begin(), v.end()));
+   }
+   return result;
+}
+
+int main() {
+   i64 n, result = 0;
+   cin >> n;
+   for (int i = 1; i <= n; ++i) {
+      result += gen(i);
+   }
+   cout << result << endl;
+}
+{% endhighlight %}
+
+You may have had trouble coming up with the actual implementation for the solution yourself.
+That's fine, we're more interested in time complexity, but take a good look at the above solution if you want to really grasp what it's doing.
+It turns out you're computing all the permutations of length $$1, \cdots, n$$ with repeated entires.
+That mean we're dealing with a permutation with repetitions.
+If you try to run the above code on anything about say $$30$$ you'll notice that it takes much longer than half a second.
+If you use our counting principles we can quickly see that the time complexity for this algorithm is $$\mathcal{O}(2^n)$$, exponential.
+
+That's no good, how can we do better?
+Well, as it turns out the problem is only interested in *counting* the number of permutations with repetition.
+When we computed the time complexity, we were doing just that (with some hand waving of lower order terms).
+It turns out that for a word of length $$n$$ with two possible letters the number of permutations is $$2^n$$, and for a word of length $$n-1$$ it's $$2^{n-1}$$, and so on.
+With this observation, we can come up with a new solution that solves the problem in $$\mathcal{O}(n)$$ instead:
+
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long i64;
+
+int main() {
+   i64 n, result = 0;
+   cin >> n;
+   for (i64 i = 1, pow2 = 2; i <= n; ++i, pow2 = pow2 << 1) {
+      result += pow2;
+   }
+   cout << result << endl;
+}
+{% endhighlight %}
+
+We just add powers of two to the result until we hit the length of the string.
+
 ## Heuristics Using Problem Bounds
 Big-O notation offers us a powerful way to determine time complexity at scale, and with the constant multiplier we can do decently well at lower values as well.
 However, in a competitive setting, there additional information which is crucial in determining if your solution will work.
@@ -519,6 +592,14 @@ int main() {
 }
 {% endhighlight %}
 
+## Final Remarks
+
+Hopefully after this you can agree with me that Big-O notation is valuable tool in understanding the cost of a particular algorithm.
+We didn't discuss space complexity in any great depth, but all of the same principles apply, you just measure space instead of time.
+Remember that finding a solution at all is always the first step, don't throw something out immediately because you're quick on the trigger to know it's too slow.
+Slow solutions can still solve a problem within the time and space constraints.
+However, also remember that once you have that slow solution, you can use these tools and techniques to know that it *is* too slow before wasting time and getting a `Time Limit Exceeded`.
+Ultimately that is the point, being able to make quick and powerful judgments about potential solutions so that you can make better use of your development time, as well as your machine time.
 
 
 ## References
