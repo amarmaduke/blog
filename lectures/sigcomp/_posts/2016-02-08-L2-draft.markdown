@@ -437,9 +437,6 @@ If you imagine taking the always-left recursive path down the binary tree discus
 That means our time complexity is $$\mathcal{O}(n)$$ for the second code sample.
 An incredible improvement, and with the aid of Big-O notation you can see precisely why.
 
-
-
-
 ## Heuristics Using Problem Bounds
 Big-O notation offers us a powerful way to determine time complexity at scale, and with the constant multiplier we can do decently well at lower values as well.
 However, in a competitive setting, there additional information which is crucial in determining if your solution will work.
@@ -453,15 +450,72 @@ Let's try a naive solution:
 {% highlight c++ %}
 #include <bits/stdc++.h>
 using namespace std;
-unsigned long long modulo = (1 << 19) - 1;
+unsigned long long modulo = (1 << 19) - 1LL;
 int main() {
    unsigned long long n;
    cin >> n;
-   unsigned long long result = 0;
-   for (unsigned long long i = 1; i <= n; ++i) {
+   unsigned long long result = 0LL;
+   for (unsigned long long i = 1LL; i <= n; ++i) {
      result = (result + i) % modulo;
    }
    cout << result << endl;
+}
+{% endhighlight %}
+
+A single for loop, a cool $$\mathcal{O}(n)$$ solution!
+Except it's way too slow.
+We can see this by using the highest bound on $$n$$, $$10^{10}$$.
+We use the upper bound as a heuristic for how many operations will be executed.
+A general rule is that we can get away with two to three million operations.
+Any more operations and you're pushing your luck.
+Of course, this is a broad generalization of the reality, and if your constant multiplier is reducing an eight million operation count worst case down to two million, then things just might work out.
+
+We can improve our algorithm by using an $$\mathcal{O}(1)$$ algorithm below, take a look and see if it makes sense.
+
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+unsigned long long modulo = (1 << 19) - 1LL;
+int main() {
+   unsigned long long n;
+   cin >> n;
+   unsigned long long left = n, right = n + 1LL;
+   if (left % 2LL == 0) left /= 2LL; else right /= 2LL;
+   unsigned long long result = (left % modulo * right % modulo) % modulo;
+   cout << result << endl;
+}
+{% endhighlight %}
+
+Here is another example.
+For $$q$$ queries, print the $$k$$th permutation of a given ordered string of length $$n$$ in less than two seconds, where $$1 \leq q \leq 1000$$, $$1 \leq n \leq 9$$.
+
+A naive solution is to generate all the permutations, store them in memory, and then print them out for each query.
+Hold on, though, that approach would be $$\mathcal{O}(n!)$$, the worst time complexity we know of!
+The unfortunate competitor might immediately dismiss the naive solution and move on to trying to figure something else out.
+In reality, the naive solution is perfectly acceptable.
+Using the worst bound, $$n = 9$$, we have $$9! = 362880$$, well under a million.
+
+Try the below naive solution out for yourself, the input it assumed to be two numbers $$n$$ then $$q$$, a lexicographically ordered string, and then $$q$$ numbers that are smaller than $$n$$.
+
+{% highlight c++ %}
+#include <bits/stdc++.h>
+using namespace std;
+
+map<int, string> memo;
+int main() {
+   int n, q, k = 0;
+   cin >> n >> q;
+   string s;
+   cin >> s;
+   memo[k] = s;
+   while (next_permutation(s.begin(), s.end())) {
+      memo[++k] = s;
+   }
+   for (int i = 0; i < q; ++i) {
+      int qk;
+      cin >> qk;
+      cout << memo[qk] << endl;
+   }
 }
 {% endhighlight %}
 
