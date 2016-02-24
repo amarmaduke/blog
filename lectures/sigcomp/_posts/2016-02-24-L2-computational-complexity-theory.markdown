@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Computational Complexity Theory and Heuristics"
-date:   2014-02-24 11:15:00 -0500
+date:   2016-02-24 11:15:00 -0500
 permalink: /:categories/:title.html
 ---
 
