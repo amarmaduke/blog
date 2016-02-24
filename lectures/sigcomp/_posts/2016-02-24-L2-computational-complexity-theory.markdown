@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Computational Complexity Theory and Heuristics"
-date:   2014-02-08 02:20:00 -0500
+date:   2014-02-24 11:15:00 -0500
 permalink: /:categories/:title.html
 ---
 
@@ -164,11 +164,6 @@ integer solve(int n) {
 }
 
 int main() {
-
-   auto test = integer(1, 1);
-   auto ret = test + test;
-   cout << strify(ret) << endl;
-
    for (int i = 0; i <= 1000; ++i) {
       auto start = chrono::high_resolution_clock::now();
       integer result = solve(i);
@@ -231,9 +226,13 @@ This kind of notation to express complexity classes is called Big-O notation.
 
 Here are some properties of Big-O:
 
-1. $$\mathcal{O}(cf) = \mathcal{O}(f),~\forall c : \mathbb{R}$$
-2. $$\mathcal{O}(n^k + n^{k-1} + \cdots + n + 1) = \mathcal{O}(n^k),~\forall~ \mbox{finite}~k$$
-3. $$f \in \mathcal{O}(g) \implies \mathcal{O}(g + cf) = \mathcal{O}(g),~\forall c : \mathbb{R}$$
+$$ \begin{gather}
+\mathcal{O}(cf) = \mathcal{O}(f),~\forall c : \mathbb{R} \\
+
+\mathcal{O}(n^k + n^{k-1} + \cdots + n + 1) = \mathcal{O}(n^k),~\forall~ \mbox{finite}~k \\
+
+f \in \mathcal{O}(g) \implies \mathcal{O}(g + cf) = \mathcal{O}(g),~\forall c : \mathbb{R}
+\end{gather} $$
 
 
 ### The Constant Matters
@@ -257,14 +256,15 @@ However, we're going to discuss a different kind of hierarchy.
 
 Here is a list of complexity classes, in order of fastest to slowest:
 
-1. $$\mathcal{O}(1)$$
-2. $$\mathcal{O}(\log(n))$$
-3. $$\mathcal{O}(n)$$
-4. $$\mathcal{O}(n\log(n))$$
-5. $$\mathcal{O}(n^2)$$
-6. $$\mathcal{O}(n^3)$$
-7. $$\mathcal{O}(2^n)$$
-8. $$\mathcal{O}(n!)$$
+$$
+\mathcal{O}(1) \in
+\mathcal{O}(\log(n)) \in
+\mathcal{O}(n) \in
+\mathcal{O}(n\log(n)) \in
+\mathcal{O}(n^2) \in
+\mathcal{O}(n^3) \in
+\mathcal{O}(2^n) \in
+\mathcal{O}(n!)$$
 
 Each faster (or "smaller") complexity class can be said to be "in" any of the slower (or "larger") ones.
 This is an absorption property of complexity classes, but the utility comes in determining the smallest such complexity class that your algorithm is "in".
@@ -282,7 +282,7 @@ Time complexity is the most important measurement because it is the most heavily
 In the real world, especially on embedded systems, things like space complexity could become a much more important factor, but our target is the competitive programming scene.
 Error complexity is incredibly important (almost more so than time complexity) in numerical computation.
 Who cares how fast your algorithm is if it isn't approximately correct to some error tolerance?
-These kinds of problems do show up in contests but we can usually rest easy just by using `double`, and worst case by implementing our own ratio class.
+These kinds of problems do show up in contests but we can usually rest easy just by using `double`, `long double`, and worst case by implementing our own ratio class.
 
 The question remains, how do we determine complexity?
 
@@ -373,9 +373,9 @@ This can be called a $$\textit{k-permutation of n}$$.
 A similar analogy works to motivate the formula, the divisor will remove the extra empty spaces that you are no longer considering.
 
 A permutation with repetition of a sequence of length $$n$$ with $$k$$ distinct elements is $$k^n$$.
-To understanding this we can use the same visual analogy.
+To understand this we can use the same visual analogy.
 Imagine the line, except now when we select a member for the first spot, that member is still available for the second spot.
-This means that every spot in our empty queue has $$n$$ potential members, giving the formula.
+This means that every spot in our empty queue has $$k$$ potential members, giving the formula.
 
 A combination of a set with $$n$$ elements of which $$k$$ are to be selected is $$\left(n \atop k\right) = \frac{n!}{k!(n-k)!}$$.
 Generally when we speak about combinations we say *n choose k* and write it $$\left( n \atop k \right)$$.
@@ -390,7 +390,7 @@ We also have $$n-1$$ separators.
 We are allowed to place each separator wherever we like in the sequence of balls.
 We could place them all on the right, enclosing none of the balls, or intersperse them.
 Once placed, we can few the enclosed balls between separators as the choice of what values those balls now map to.
-There are $$n - k - 1$$ different positions (of separators and balls), of which we choose $$k$$ balls into various different positions and use the separators to fill in the rest.
+There are $$n + k - 1$$ different positions (of separators and balls), of which we choose $$k$$ balls into various different positions and use the separators to fill in the rest.
 
 Sometimes a problem will be glaringly obvious that it wants you to work with permutations of say a string.
 Sometimes, you can just generate all the permutations via `next_permutation` in the C++ Standard Template Library and perform a complete search in $$\mathcal{O}(n!)$$.
@@ -416,8 +416,8 @@ With these observations the number of nodes (and thus computations) is $$\mathca
 
 There are a couple of lies though in the above approach.
 The first lie is that the tree is complete.
-If the tree is complete, then it is indeed the case that you have $$2^n$$ nodes and thus the correct time complexity, but in our case there is no reason to believe that it is.
-This gets back to a concept we discussed before, Big-O notation is about upper bounds, *but* we want to make those upper bounds are as *sharp* as possible.
+If the tree is complete, then it is indeed the case that you have $$2^n - 1$$ nodes and thus the correct time complexity, but in our case there is no reason to believe that it is.
+This gets back to a concept we discussed before, Big-O notation is about upper bounds, *but* we want to make those upper bounds as *sharp* as possible.
 A *sharp* upper bound is also called the *least* upper bound, it is the complexity class that precisely describes the worst case performance where no other complexity class could still be an upper bound but be absorbed by it.
 That is to say, if $$\mathcal{O}(f)$$ is a sharp upper bound, and $$\mathcal{O}(g)$$ is any other upper bound, then either $$\mathcal{O}(f) = \mathcal{O}(g)$$ or $$\mathcal{O}(f) \in \mathcal{O}(g)$$.
 
@@ -427,10 +427,10 @@ Then, $$T(n) = T(n-1) + T(n-2) + O(1)$$.
 The constant factor can be ignored, and we have a linear recurrence relation:
 $$T_n = T_{n-1} + T_{n-2}$$.
 Here is the trick.
-A linear recurrence relation takes the following form: $$a_n = c_{n-1}a_{n-1} + c_{n-2}a_{n-2} + \cdots + c_{1}a_{1} + c_0a_0$$ with $$c_i : \mathbb{R}$$ for $$0 \leq i < n$$.
+A linear recurrence relation takes the following form: $$a_n = c_{n-1}a_{n-1} + c_{n-2}a_{n-2} + \cdots + c_{1}a_{1}$$ with $$c_i : \mathbb{R}$$ for $$0 < i < n$$.
 Any linear recurrence relation can be solved by taking the following assumption: $$a_n = \alpha^n$$.
 Where $$\alpha^n$$ is called a *generation function*, or sometimes an *ansatz*.
-Plug in the generation function into the recurrence relation, simplify to a polynomial, solve for the roots, and then the answer is the sum of those $$\alpha$$ values times constant multipliers (in general).
+Plug in the generation function into the recurrence relation, simplify to a polynomial, solve for the roots, and then the answer is the sum of those $$\alpha$$ values (to the $$n$$th power) times constant multipliers (in general).
 Quickly, here it is for the Fibonacci recurrence relation (which just so happens to be the $$T_n$$ recurrence relation as well):
 
 $$T_n = T_{n-1} + T_{n-2}$$
@@ -583,7 +583,7 @@ Here is another example.
 For $$q$$ queries, print the $$k$$th permutation of a given ordered string of length $$n$$ in less than two seconds, where $$1 \leq q \leq 1000$$, $$1 \leq n \leq 9$$.
 
 One solution is to generate all the permutations, store them in memory, and then print them out for each query.
-Hold on, though, that approach would be $$\mathcal{O}(n!)$$, the worst time complexity we know of!
+Hold on, though, that approach would be $$\mathcal{O}(n! + q)$$, the worst time complexity we know of!
 The unfortunate competitor might immediately dismiss the naive solution and move on to trying to figure something else out.
 In reality, the naive solution is perfectly acceptable.
 Using the worst bound, $$n = 9$$, we have $$9! = 362880$$, well under a million.
@@ -630,9 +630,14 @@ Ultimately that is the point, being able to make quick and powerful judgments ab
 <script>
 var paper = Snap("#fig1");
 
-var px = 600; var py = 80;
-var pressed = 0;
-var button = paper.polygon([px, py, px, py + 40, px + 25, py + 20])
+var fbx = 660; var fby = 80;
+var bbx = 600; var bby = 80;
+var sbx = 610; var sby = 80;
+var forward_pressed = 0; var backward_pressed = 0;
+var forward_button = paper.polygon([fbx, fby, fbx, fby + 40, fbx + 25, fby + 20])
+var backward_button = paper.polygon([bbx, bby, bbx - 25, bby + 20, bbx, bby + 40])
+var stop_button = paper.polygon(
+   [sbx, sby, sbx + 40, sby, sbx + 40, sby + 40, sbx, sby + 40])
 var set = Snap([]);
 
 var data = [];
@@ -656,6 +661,17 @@ for (i = 0; i < n; ++i)
 for (i = 0; i < n; ++i)
    for (j = 0; j < n; ++ j)
       set.push(paper.circle(430 + 15*j, 50 + 15*i, 5));
+
+var tmp_frame = [];
+for (k = 0; k < 3; ++k) {
+   for (i = 0; i < n; ++i) {
+      for (j = 0; j < n; ++j) {
+         tmp_frame.push([{fill: '#000000'}, speed]);
+      }
+   }
+}
+tmp_frame[tmp_frame.length - 1].push(function() { loop(); });
+data.push(tmp_frame);
 
 for (i = 0; i < n; ++i) {
    for (j = 0; j < n; ++j) {
@@ -702,28 +718,36 @@ for (i = 0; i < n; ++i) {
          }
       }
 
-      if (k + 1 != n*n) {
-         frame[frame.length - 1].push(function() { loop(); });
-      } else {
-         frame[frame.length - 1].push(function() { pressed = 0; });
-      }
+      frame[frame.length - 1].push(function() { loop(); });
       data.push(frame);
    }
 }
 
-var loop = function() { set.animate(...next_frame(++idx)); };
-var next_frame = function(i) {
-   return data[i];
+var loop = function() {
+   if (forward_pressed != 0 && idx < n*n)
+      set.animate.apply(set, data[++idx]);
+   else if (backward_pressed != 0 && idx > 0)
+      set.animate.apply(set, data[--idx]);
 };
 
-var click = function(event) {
-   if (pressed == 0) {
-      idx = 0;
-      pressed = 1;
-      set.animate(...next_frame(0));
-   }
-};
+forward_button.click(function(event) {
+      if ((idx == 0 || backward_pressed == 0) && forward_pressed == 0)
+         set.animate.apply(set, data[idx]);
+      forward_pressed = 1;
+      backward_pressed = 0;
+   })
 
-button.click(click);
+backward_button.click(function(event) {
+      if ((idx == n*n || forward_pressed == 0) && backward_pressed == 0)
+         set.animate.apply(set, data[idx]);
+      forward_pressed = 0;
+      backward_pressed = 1;
+   })
+
+stop_button.click(function(event) {
+      backward_pressed = 0;
+      forward_pressed = 0;
+   })
+
 
 </script>
