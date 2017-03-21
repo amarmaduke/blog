@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Personal Sprints and Getting Stuff Done"
-date:   2017-03-20 23:00:00 -0500
+date:   2017-03-20 10:00:00 -0500
 permalink: /:categories/:title.html
 ---
 
@@ -58,7 +58,7 @@ Namely, syncing between the desktop app and the android app causes a complete re
 I primarily want to consume my decks via my phone so this is a big annoyance.
 The goal is then clear:
 
-*Make syncing between the android app and the desktop app work after imports from _ankideckffs_*
+**Make syncing between the android app and the desktop app work after imports from _ankideckffs_**
 
 Here are some bonus objectives that I'll consider doing if I find the time:
 * improve the readme,
