@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Sprint: But the Transitions are Right Here!"
-date:   2017-04-10 10:00:00 -0500
+date:   2017-04-17 10:00:00 -0500
 permalink: /:categories/:title.html
 ---
 
