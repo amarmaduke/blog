@@ -20,3 +20,5 @@ markdown: kramdown
 
 # Exclusions
 exclude: [visualizations]
+
+plugins_dir: _plugins

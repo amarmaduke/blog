@@ -226,13 +226,13 @@ This kind of notation to express complexity classes is called Big-O notation.
 
 Here are some properties of Big-O:
 
-$$ \begin{gather}
-\mathcal{O}(cf) = \mathcal{O}(f),~\forall c : \mathbb{R} \\
-
-\mathcal{O}(n^k + n^{k-1} + \cdots + n + 1) = \mathcal{O}(n^k),~\forall~ \mbox{finite}~k \\
-
-f \in \mathcal{O}(g) \implies \mathcal{O}(g + cf) = \mathcal{O}(g),~\forall c : \mathbb{R}
-\end{gather} $$
+{% katex display %}
+\begin{gathered}
+& \mathcal{O}(cf) = \mathcal{O}(f), \forall c : \mathbb{R}\\
+& \mathcal{O}(n^k + n^{k-1} + \cdots + n + 1) = \mathcal{O}(n^k), \forall~\text{finite}~k\\
+& f \in \mathcal{O}(g) \implies \mathcal{O}(g + cf) = \mathcal{O}(g), \forall c : \mathbb{R}
+\end{gathered}
+{% endkatex %}
 
 
 ### The Constant Matters
