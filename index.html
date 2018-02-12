@@ -7,7 +7,22 @@ layout: default
   <h1 class="page-heading">Posts</h1>
 
   <ul class="post-list">
-    {% for post in site.posts %}
+    {% for post in site.categories.article limit:10 %}
+      <li>
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+
+        <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </h2>
+        <div class="post-snippet">{{ post.excerpt }}</div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h1 class="page-heading">Musings</h1>
+
+  <ul class="post-list">
+    {% for post in site.categories.musing limit:3 %}
       <li>
         <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
 
@@ -17,5 +32,7 @@ layout: default
       </li>
     {% endfor %}
   </ul>
+
+  {% include algolia.html %}
 
 </div>

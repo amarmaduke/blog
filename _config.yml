@@ -22,3 +22,23 @@ markdown: kramdown
 exclude: [visualizations]
 
 plugins_dir: _plugins
+
+plugins:
+  - jekyll-archives
+
+jekyll-archives:
+  enabled: ['all']
+  layout: 'archive'
+  permalinks:
+    year: '/:year/'
+    month: '/:year/:month/'
+    day: '/:year/:month/:day/'
+    tag: '/tag/:name/'
+    category: '/category/:name/'
+
+
+# ALGOLIA_API_KEY='{your_admin_api_key}' bundle exec jekyll algolia
+algolia:
+  application_id: 'JZCK1C4OJG'
+  index_name: 'blog'
+  search_only_api_key: 'f605571707bbbd81f7b73056d605b2a9'

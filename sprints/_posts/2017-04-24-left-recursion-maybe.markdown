@@ -3,6 +3,7 @@ layout: post
 title:  "Sprint: Left Recursion! Maybe?"
 date:   2017-04-24 10:00:00 -0500
 permalink: /:categories/:title.html
+category: musing
 ---
 
 ## Bounded Recursion and Left Recursion

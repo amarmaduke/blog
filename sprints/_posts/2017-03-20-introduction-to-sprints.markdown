@@ -3,6 +3,7 @@ layout: post
 title:  "Personal Sprints and Getting Stuff Done"
 date:   2017-03-20 10:00:00 -0500
 permalink: /:categories/:title.html
+category: musing
 ---
 
 

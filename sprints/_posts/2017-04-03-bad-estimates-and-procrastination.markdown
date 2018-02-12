@@ -3,6 +3,7 @@ layout: post
 title:  "Sprint: Bad Estimates and Procrastination"
 date:   2017-04-03 10:00:00 -0500
 permalink: /:categories/:title.html
+category: musing
 ---
 
 ## Estimation, is it Hard?

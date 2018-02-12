@@ -3,6 +3,7 @@ layout: post
 title:  "Using C++ and Java for Competitive Programming"
 date:   2016-02-04 02:20:00 -0500
 permalink: /:categories/:title.html
+category: article
 ---
 
 - C++ Standard Template Library Data Structures

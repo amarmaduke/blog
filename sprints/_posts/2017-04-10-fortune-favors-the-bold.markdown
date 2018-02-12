@@ -3,6 +3,7 @@ layout: post
 title:  "Sprint: Fortune Favors the Bold"
 date:   2017-04-10 10:00:00 -0500
 permalink: /:categories/:title.html
+category: musing
 ---
 
 ## Not Again!

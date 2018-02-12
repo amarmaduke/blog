@@ -3,6 +3,7 @@ layout: post
 title:  "Sprint: Parsing Virtual Machines and One Line Changes"
 date:   2017-03-27 10:00:00 -0500
 permalink: /:categories/:title.html
+category: musing
 ---
 
 
