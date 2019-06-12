@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Using C++ and Java for Competitive Programming</title>
+  <meta name="description" content="">
+  <script src="/js/snap.svg-min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://muse.life/lectures/sigcomp/article/L1-competitive-cpp-and-java.html">
+  <link rel="alternate" type="application/rss+xml" title="muse life" href="http://muse.life/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">muse life</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+          <a class="page-link" href="/archive/">Archive</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/search.html">Search</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Using C++ and Java for Competitive Programming</h1>
+    <p class="post-meta"><time datetime="2016-02-03T23:20:00-08:00" itemprop="datePublished">Feb 3, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <ul id="markdown-toc">
+  <li><a href="#c-standard-template-library-data-structures" id="markdown-toc-c-standard-template-library-data-structures">C++ Standard Template Library Data Structures</a>    <ul>
+      <li><a href="#pairs-and-tuples" id="markdown-toc-pairs-and-tuples">Pairs and Tuples</a></li>
+      <li><a href="#containers" id="markdown-toc-containers">Containers</a>        <ul>
+          <li><a href="#vector" id="markdown-toc-vector">Vector</a></li>
+          <li><a href="#set" id="markdown-toc-set">Set</a></li>
+          <li><a href="#map" id="markdown-toc-map">Map</a></li>
+          <li><a href="#priority-queue" id="markdown-toc-priority-queue">Priority Queue</a></li>
+          <li><a href="#unordered-map" id="markdown-toc-unordered-map">Unordered Map</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#c-standard-template-library-algorithms" id="markdown-toc-c-standard-template-library-algorithms">C++ Standard Template Library Algorithms</a>    <ul>
+      <li><a href="#fill-and-copy" id="markdown-toc-fill-and-copy">Fill and Copy</a></li>
+      <li><a href="#reverse" id="markdown-toc-reverse">Reverse</a></li>
+      <li><a href="#sort-and-stable-sort" id="markdown-toc-sort-and-stable-sort">Sort and Stable Sort</a></li>
+      <li><a href="#max-and-min-element" id="markdown-toc-max-and-min-element">Max and Min Element</a></li>
+      <li><a href="#permutations" id="markdown-toc-permutations">Permutations</a></li>
+    </ul>
+  </li>
+  <li><a href="#understanding-iterators-and-using-the-stl" id="markdown-toc-understanding-iterators-and-using-the-stl">Understanding Iterators and Using the STL</a></li>
+  <li><a href="#c11" id="markdown-toc-c11">C++11</a>    <ul>
+      <li><a href="#auto-keyword-and-new-for-loop" id="markdown-toc-auto-keyword-and-new-for-loop"><code class="highlighter-rouge">auto</code> Keyword and New For Loop</a></li>
+      <li><a href="#initializer-lists" id="markdown-toc-initializer-lists">Initializer Lists</a></li>
+      <li><a href="#lambdas" id="markdown-toc-lambdas">Lambdas</a></li>
+      <li><a href="#regex" id="markdown-toc-regex">Regex</a></li>
+    </ul>
+  </li>
+  <li><a href="#general-c-style" id="markdown-toc-general-c-style">General C++ Style</a></li>
+  <li><a href="#io-performance" id="markdown-toc-io-performance">IO Performance</a></li>
+  <li><a href="#java" id="markdown-toc-java">Java</a>    <ul>
+      <li><a href="#when-to-bother" id="markdown-toc-when-to-bother">When to Bother</a></li>
+      <li><a href="#biginteger-and-bigdecimal" id="markdown-toc-biginteger-and-bigdecimal">BigInteger and BigDecimal</a></li>
+      <li><a href="#localdate" id="markdown-toc-localdate">LocalDate</a></li>
+      <li><a href="#geometry" id="markdown-toc-geometry">Geometry</a></li>
+      <li><a href="#regex-1" id="markdown-toc-regex-1">Regex</a></li>
+    </ul>
+  </li>
+  <li><a href="#final-tips" id="markdown-toc-final-tips">Final Tips</a></li>
+</ul>
+
+<h2 id="c-standard-template-library-data-structures">C++ Standard Template Library Data Structures</h2>
+
+<p>There are several useful data structures to know and understand from the Standard Template Library (STL).
+To name a few: <code class="highlighter-rouge">pair</code>, <code class="highlighter-rouge">tuple</code> (C++11), <code class="highlighter-rouge">vector</code>, <code class="highlighter-rouge">set</code>, <code class="highlighter-rouge">map</code>, <code class="highlighter-rouge">priority_queue</code>, and <code class="highlighter-rouge">unordered_map</code> (C++11).</p>
+
+<h3 id="pairs-and-tuples">Pairs and Tuples</h3>
+
+<p><code class="highlighter-rouge">pair</code> and <code class="highlighter-rouge">tuple</code> (C++11) can be used to join two or more heterogeneous types together.
+Each value inside the structure can be accessed by member variables, or with <code class="highlighter-rouge">get&lt;unsigned int&gt;(tuple&lt;...&gt; t)</code> (C++11).
+It is more or less a style choice to use <code class="highlighter-rouge">pair</code> and <code class="highlighter-rouge">tuple</code> over custom structs.</p>
+
+<p>Example (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">make_pair</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+   <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+   <span class="n">tie</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">first</span> <span class="o">==</span> <span class="n">x</span><span class="p">);</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">second</span> <span class="o">==</span> <span class="n">y</span><span class="p">);</span>
+
+   <span class="n">tuple</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="n">make_tuple</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">first</span> <span class="o">==</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">)));</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">second</span> <span class="o">==</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">)));</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">tuple</code> type is only available with C++11, so if C++11 is not allowed you’ll have to emulate tuples with your own struct:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">First</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Second</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Third</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="n">triple</span> <span class="p">{</span>
+   <span class="n">First</span> <span class="n">first</span><span class="p">;</span>
+   <span class="n">Second</span> <span class="n">second</span><span class="p">;</span>
+   <span class="n">Third</span> <span class="n">third</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>A small amount of template programming can go a long way in a contest setting, but if you over do it you’ll pay a hefty price in the compile log.
+The above code snippet will work perfect assuming <code class="highlighter-rouge">First</code>, <code class="highlighter-rouge">Second</code>, and <code class="highlighter-rouge">Third</code> are Plain ol’ Data (POD) or value types like <code class="highlighter-rouge">int</code>, <code class="highlighter-rouge">long long</code>, etc.
+In a competitive setting we’re usually working with value types anyway, but if you need to work with more complicated types, just make a dedicated struct.</p>
+
+<h3 id="containers">Containers</h3>
+
+<p>STL containers are useful for their properties and in a setting where you want to dynamically grow a data structure.
+Static data is better off as a static array because of the bound information available in the problem.
+However, it is still good to know the STL data structures when you inevitably encounter a problem that has you remove data or shrink and grow the data dynamically.</p>
+
+<h4 id="vector">Vector</h4>
+
+<p>A <code class="highlighter-rouge">vector</code> should be considered the dynamic array. You should never bother using a pointer, allocating space yourself, and then worrying about deleting it.
+Repeat after me, if you don’t know what to use to store data, use a <code class="highlighter-rouge">vector</code>.</p>
+
+<p>A <code class="highlighter-rouge">vector</code> can be thought of as a contiguous collection of data in memory.
+That means if you add data to a vector which then requires more space than its originally allocated size then it has to copy all of its data to a newly allocated array in memory.
+This sounds slow, but in practice we know about how much data the vector is going to contain, and it is clever about how much additional space it is going to take if it has to regrow to prevent excessive copies or moves.</p>
+
+<p>Thus, we can think of a <code class="highlighter-rouge">vector</code> as having <script type="math/tex">\mathcal{O}(1)</script> insertion and index time complexity.
+Deleting from a <code class="highlighter-rouge">vector</code> is more complicated.
+If you are consistently deleting elements, a <code class="highlighter-rouge">vector</code> might start to be a poor choice.</p>
+
+<p>Example:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span> <span class="c1">// Empty vector</span>
+   <span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+   <span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">w</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// Two uninitialized elements</span>
+   <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">equal</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">w</span><span class="p">.</span><span class="n">begin</span><span class="p">()));</span>
+<span class="p">}</span></code></pre></figure>
+
+<h4 id="set">Set</h4>
+
+<p>A <code class="highlighter-rouge">set</code> is designed to emulate a mathematical set, or a collection of unique values.
+Under the hood a set is really a tree and a useful benefit is that an iterator over a set will be a sorted collection.</p>
+
+<p>We should choose a <code class="highlighter-rouge">set</code> either when the data conceptually matches our idea of a mathematical set or we want to keep a dynamically changing collection of sorted values.
+Because of the nature of a <code class="highlighter-rouge">set</code> the insertion, search, and deletion time complexities are all <script type="math/tex">\mathcal{O}(\log(n))</script>.</p>
+
+<p>Example (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">};</span> <span class="c1">// C++11 Initializer List</span>
+   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">:</span> <span class="n">v</span><span class="p">)</span>
+      <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">:</span> <span class="n">v</span><span class="p">)</span>
+      <span class="n">assert</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// Can only have one unique element</span>
+<span class="p">}</span></code></pre></figure>
+
+<h4 id="map">Map</h4>
+
+<p>If you need a collection of key-value pairs for two heterogeneous types <code class="highlighter-rouge">Key</code> and <code class="highlighter-rouge">Value</code> then you want a <code class="highlighter-rouge">map</code>.
+Under the hood a <code class="highlighter-rouge">map</code> is most likely a balanced tree (not unlike a <code class="highlighter-rouge">set</code>).
+This means insertion, deletion, and search are going to have a similar time complexity of <script type="math/tex">\mathcal{O}(\log(n))</script>.
+One benefit of an STL <code class="highlighter-rouge">map</code> is the overloaded index operator:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span> <span class="n">dictionary</span><span class="p">;</span>
+   <span class="n">string</span> <span class="n">definition</span> <span class="o">=</span> <span class="s">"Name usually given to a boy or powerful wizard."</span><span class="p">;</span>
+   <span class="n">dictionary</span><span class="p">[</span><span class="s">"Albus"</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span><span class="p">;</span>
+   <span class="n">assert</span><span class="p">(</span>
+      <span class="n">equal</span><span class="p">(</span><span class="n">definition</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">definition</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">dictionary</span><span class="p">[</span><span class="s">"Albus"</span><span class="p">].</span><span class="n">begin</span><span class="p">())</span>
+   <span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Having an index operator leads to more intuitive and often easier to read code, especially if your mapping is mostly from value type to value type.
+A trick with <code class="highlighter-rouge">map</code> is using them as dynamically growing grids or spaces.
+It’s rare, but there may be a problem were initializing a grid statically would eat too much memory but there is a significantly smaller amount of cells you care about.</p>
+
+<p>Consider this (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="c1">// The first template argument is the key, the second is the value.</span>
+   <span class="c1">// Thus we have a map from ints to another map from ints to ints.</span>
+   <span class="c1">// This forms an "empty" grid which can be filled in dynamically.</span>
+   <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">grid</span><span class="p">;</span>
+   <span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+   <span class="n">grid</span><span class="p">[</span><span class="mi">1002</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+   <span class="k">typedef</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+   <span class="k">typedef</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">subiter</span><span class="p">;</span>
+   <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="n">it</span> <span class="o">=</span> <span class="n">grid</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">grid</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span>
+      <span class="k">for</span> <span class="p">(</span><span class="n">subiter</span> <span class="n">jt</span> <span class="o">=</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">jt</span> <span class="o">!=</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">jt</span><span class="p">)</span>
+         <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">jt</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">jt</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+   <span class="c1">// Or with C++11</span>
+   <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">sp</span> <span class="o">:</span> <span class="n">grid</span><span class="p">)</span>
+      <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p</span> <span class="o">:</span> <span class="n">sp</span><span class="p">.</span><span class="n">second</span><span class="p">)</span>
+         <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">sp</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>If you’re more comfortable with using a <code class="highlighter-rouge">map</code> instead of a static array then go for it.
+Most of the time you can get away with it.
+However, if you want the most performant code in a competitive setting, you should use static or cache-friendly data structures whenever possible.</p>
+
+<h4 id="priority-queue">Priority Queue</h4>
+
+<p>A <code class="highlighter-rouge">priority_queue</code> gives the largest element by the default order relation of the template argument.
+This order relation can be changed by giving a different comparison function in the template arguments or in the constructor.
+The benefit of a <code class="highlighter-rouge">priority_queue</code> is <script type="math/tex">\mathcal{O}(1)</script> search for the largest element with respect to the order relation.
+However, insertion and extraction (of all elements, including the largest) from the queue is still <script type="math/tex">\mathcal{O}(log(n))</script> time complexity.
+With a <code class="highlighter-rouge">priority_queue</code> you can only extract the largest element (in the STL implementation), and you can’t iterate over the elements.
+All the same, if you’re using a <code class="highlighter-rouge">priority_queue</code> you shouldn’t want to extract anything but the largest element.
+The idea is to process the largest element in the queue, perhaps while additional elements are being added, until some condition is meant.
+A classic use case for a <code class="highlighter-rouge">priority_queue</code> is implementing Dijkstras were you want to greedily take the lowest cost path available to you.
+To switch <code class="highlighter-rouge">priority_queue</code> from a largest element to lowest element is easy (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="c1">// Template arguemnts are: value type, container type, order relation</span>
+   <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">:</span> <span class="n">values</span><span class="p">)</span> <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">answer</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">;</span>
+   <span class="k">while</span> <span class="p">(</span><span class="n">not</span> <span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="n">a</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">top</span><span class="p">()),</span> <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+
+   <span class="n">assert</span><span class="p">(</span><span class="n">equal</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">a</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">answer</span><span class="p">.</span><span class="n">begin</span><span class="p">()));</span>
+<span class="p">}</span></code></pre></figure>
+
+<h4 id="unordered-map">Unordered Map</h4>
+
+<p>An <code class="highlighter-rouge">unordered_map</code> is much like a normal <code class="highlighter-rouge">map</code> except its elements are not guaranteed to be ordered on traversal.
+In reality, under the hood a <code class="highlighter-rouge">map</code> is most likely a balanced tree, an <code class="highlighter-rouge">unodered_map</code> is most likely some kind of hash map.
+With a hash map, <code class="highlighter-rouge">unordered_map</code> gives us on average constant time complexity for search, insertion, and deletion of elements.
+You can do all the same things with <code class="highlighter-rouge">unordered_map</code> that you could with <code class="highlighter-rouge">map</code> but if you don’t care much for sorted elements, you think using <code class="highlighter-rouge">map</code> itself is your bottleneck, and you have access to C++11, then try <code class="highlighter-rouge">unordered_map</code>.
+It will probably be a very rare occurrence to both need and have it be available.</p>
+
+<h2 id="c-standard-template-library-algorithms">C++ Standard Template Library Algorithms</h2>
+
+<p>Data structures are the ways in which we represent and store collections of data.
+A lot of data structures have member functions for access, search, insertion, and deletion of this data.
+The STL also provides a very useful algorithm library for manipulation, transformation, comparison, and other operations on iterator ranges.
+Just quickly, an iterator range is something almost all STL data structures implement (<code class="highlighter-rouge">priority_queue</code> proper being an exception, but you can use it’s underlying container if you want).
+To interface with many algorithms you have to use the data structure <code class="highlighter-rouge">.begin()</code> and <code class="highlighter-rouge">.end()</code> member functions which define two iterators that form a range over the data structure.
+We’ll get more into the specifics of ranges defined by two iterators later.</p>
+
+<h3 id="fill-and-copy">Fill and Copy</h3>
+
+<p>Two simple algorithms that you might find yourself using on occasion are <code class="highlighter-rouge">fill</code> and <code class="highlighter-rouge">copy</code>.
+They do precisely what you might expect: <code class="highlighter-rouge">fill</code> sets every value in a range to the supplied value, and <code class="highlighter-rouge">copy</code> copies one range to another.</p>
+
+<p>Example:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">100001</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">x</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+   <span class="n">fill</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">dp</span> <span class="o">+</span> <span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+   <span class="n">fill</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">x</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">2</span><span class="p">);</span>
+   <span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">x</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">dp</span><span class="p">);</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">equal</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">x</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">dp</span><span class="p">));</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><code class="highlighter-rouge">fill</code> in particular is a good substitute for writing the boilerplate of a for loop to set all the elements in a range.
+If you think writing a for loop is quicker or easier than a <code class="highlighter-rouge">fill</code> or <code class="highlighter-rouge">copy</code> call then go for it, it probably wont matter performance wise.
+However, you should take note that <code class="highlighter-rouge">fill</code> and <code class="highlighter-rouge">copy</code> can be optimized under the hood to be faster than your hand written for loop.
+For instance, fill could be specialized on <code class="highlighter-rouge">char</code> to just <code class="highlighter-rouge">memset</code> instead of iterating over the range.</p>
+
+<h3 id="reverse">Reverse</h3>
+
+<p>Another short and sweet algorithm is <code class="highlighter-rouge">reverse</code>.
+It’s not terribly common to need to reverse a range, but when it does come up that you have to reverse a string and you can’t just call <code class="highlighter-rouge">.reverse()</code> a certain kind of anger boils inside.</p>
+
+<p>Enter <code class="highlighter-rouge">reverse</code>, a simple algorithm that will work on <em>any</em> range, not just your strings:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">string</span> <span class="n">x</span> <span class="o">=</span> <span class="s">"This is a string."</span><span class="p">;</span>
+   <span class="n">string</span> <span class="n">answer</span> <span class="o">=</span> <span class="s">".gnirts a si sihT"</span><span class="p">;</span>
+   <span class="n">string</span> <span class="n">rx</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="sc">' '</span><span class="p">);</span>
+   <span class="n">reverse_copy</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">x</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">rx</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span> <span class="c1">// copy variant</span>
+   <span class="n">reverse</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">x</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">equal</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">x</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">answer</span><span class="p">.</span><span class="n">begin</span><span class="p">()));</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">equal</span><span class="p">(</span><span class="n">rx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">rx</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">answer</span><span class="p">.</span><span class="n">begin</span><span class="p">()));</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="sort-and-stable-sort">Sort and Stable Sort</h3>
+
+<p>Sorting is a very common problem, so much so that you probably know seven different sorting algorithms and yet the reality is that whenever you actually need to sort something you should never write the algorithm yourself.
+Instead, use <code class="highlighter-rouge">sort</code> or <code class="highlighter-rouge">stable_sort</code>.
+If you do know those seven different kinds of sorting algorithms then you can think of <code class="highlighter-rouge">sort</code> as your quick sort (hence the missing stable_ prefix), and <code class="highlighter-rouge">stable_sort</code> as your merge sort.
+The actual sorts that implement these algorithms are irrelevant, as they’re almost definitely faster than a sorting algorithm you’re going to implement (with the exception of a <script type="math/tex">\mathcal{O}(n)</script> radix sort or similar).
+If you don’t know a lot of sorting algorithms, you do know what it means to sort something, so the only detail left is what is the difference between stable and not?
+A stable sort will preserve the relative position of equal elements.
+If I want to sort <code class="highlighter-rouge">{1, 2(1), 3, 2(2)}</code> (with parentheses added for clarification), a unstable sort could give me <code class="highlighter-rouge">{1, 2(2), 2(1), 3}</code> but a stable sort will always give me <code class="highlighter-rouge">{1, 2(1), 2(2), 3}</code>.
+Note that this has nothing to do with extra information about both of the twos in the above example, it’s only preserving it’s relative position in the unsorted array.
+Not knowing when to use a <code class="highlighter-rouge">stable_sort</code> in a contest setting can be the difference between never getting that easy sorting problem and solving it instantly.
+If relative position matters (e.g. with <code class="highlighter-rouge">pair</code>s sorting on the first element only) then <em>use</em> <code class="highlighter-rouge">stable_sort</code>.</p>
+
+<p>Example (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">answer</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">};</span>
+   <span class="n">sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">equal</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">answer</span><span class="p">.</span><span class="n">begin</span><span class="p">()));</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Sorting an array is always relative to some order relation.
+If you’re only sorting value types than this is fine, worst case scenario you <code class="highlighter-rouge">reverse</code> the range once to get the ordering you want.
+However, you might need to sort something that doesn’t already have an order relation.
+<code class="highlighter-rouge">sort</code> allows you to give it a comparison function to handle these cases (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">cmp</span> <span class="p">{</span>
+   <span class="kt">bool</span> <span class="k">operator</span><span class="p">()</span> <span class="p">(</span><span class="k">const</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+   <span class="p">}</span>
+<span class="p">}</span> <span class="n">cmp</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">}</span> <span class="p">};</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">answer</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">},</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span> <span class="p">};</span>
+
+   <span class="n">stable_sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">equal</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">answer</span><span class="p">.</span><span class="n">begin</span><span class="p">()));</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="max-and-min-element">Max and Min Element</h3>
+
+<p>Finding a maximum and minimum element are fairly common problems in a competitive setting.
+Like <code class="highlighter-rouge">fill</code>, <code class="highlighter-rouge">max_element</code> and <code class="highlighter-rouge">min_element</code> aren’t going to win any awards with how complicated they are and yes you could just write the for loop yourself.
+The same motivation applies though, they’re quick, clean, and probably faster.</p>
+
+<p>Example (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+   <span class="kt">int</span> <span class="n">answer1</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">answer2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="k">typedef</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+   <span class="n">iter</span> <span class="n">M</span> <span class="o">=</span> <span class="n">max_element</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+   <span class="n">iter</span> <span class="n">m</span> <span class="o">=</span> <span class="n">min_element</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+   <span class="c1">// I don't use the dereference operator here because it breaks my markdown</span>
+   <span class="c1">// highlighting.</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">answer1</span> <span class="o">==</span> <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">answer2</span> <span class="o">==</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="permutations">Permutations</h3>
+
+<p>Iterating through a collection of permutations is not something most of learn how to do.
+Not that it is particularly complicated, but when a problem requires you to iterate through all the permutations of a string you might waste more time deriving how to do that in lexicographical order than solving the problem.
+Enter <code class="highlighter-rouge">next_permutation</code> and <code class="highlighter-rouge">prev_permutation</code>.
+Permutations, like sorts, require an order relation to make sense.
+Without getting into the weeds about lattices, partial orders, well orders, and the like, suffice to say we’ll be permuting strings most of the time, so lexicographical will work just fine.</p>
+
+<p>Example:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">string</span> <span class="n">s</span> <span class="o">=</span> <span class="s">"abcdefg"</span><span class="p">;</span>
+   <span class="kt">int</span> <span class="n">pause</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="k">do</span> <span class="p">{</span>
+      <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"continue?"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+         <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">pause</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="o">++</span><span class="n">count</span><span class="p">;</span>
+   <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">next_permutation</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">()));</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Notice that we ask for permutations until, well, there aren’t any.
+<code class="highlighter-rouge">next_permutation</code> returns a boolean telling us if there is in fact a next permutation.
+Also note that we started with an ordered string, had we not started ordered we would not have seen every permutation.
+<code class="highlighter-rouge">next_permutation</code> does not wrap around, it goes from the current state to the next lexicographical state.</p>
+
+<h2 id="understanding-iterators-and-using-the-stl">Understanding Iterators and Using the STL</h2>
+
+<p>An iterator in C++ for simplicity can be thought of as any object that supports increment (<code class="highlighter-rouge">++it</code>), dereference to a reference type (<code class="highlighter-rouge">decltype(*it) == it::reference</code>), and other miscellaneous construction, destruction, and swappable requirements.
+For a competitive purpose the only thing we need to know and understand is that an iterator will give us the “next iterator” as well as a reference to the information it stores.
+This reference information need not be a direct reference to what we perceive is the value type, as an example for <code class="highlighter-rouge">map&lt;int, int&gt;</code> we have <code class="highlighter-rouge">map&lt;int, int&gt;::iterator::reference == &amp;pair&lt;int, int&gt;</code>.
+This is because the iterator is returning all the information relative to it, i.e. the key-value pair stored in a map.
+Although from the perspective of <code class="highlighter-rouge">map</code>, this <em>is</em> its value type.
+Iterators in C++ are what in the future we’ll just call a “Concept.”
+A C++ iterator is not an interface, an object inheriting from a class iterator, or anything of the sort.
+It is merely a construct that meets the pre and post conditions which define the concept “Iterator.”</p>
+
+<p>Because of this distinction a useful realization is that pointers are iterators.
+That means, the only thing we need to do to iterate over a contiguous range of memory is supply a pointer to the first memory address and the pointer to one past the last memory address.
+“One past the last,” is a common design choice in all of the STL.
+Whenever you want to give a range to something in terms of two iterators (a begin and an end), you’re always doing it in a half-closed range.
+That means, if I have a range defined by <script type="math/tex">a</script> and <script type="math/tex">b</script>, then the actual range that my algorithms should be working over is <script type="math/tex">[a, b)</script>.
+Closed on the left, open on the right.</p>
+
+<p>Example:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">101</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">values</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+
+<span class="k">struct</span> <span class="n">gen</span> <span class="p">{</span>
+   <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+   <span class="n">gen</span><span class="p">()</span> <span class="o">:</span> <span class="n">val</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+   <span class="kt">int</span> <span class="k">operator</span><span class="p">()</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">++</span><span class="n">val</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span> <span class="n">generator</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="n">display</span> <span class="p">{</span>
+   <span class="kt">void</span> <span class="k">operator</span><span class="p">()</span> <span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">display</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">displayer</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">generate</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">values</span> <span class="o">+</span> <span class="n">N</span><span class="p">,</span> <span class="n">generator</span><span class="p">);</span>
+   <span class="n">for_each</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">values</span> <span class="o">+</span> <span class="n">N</span><span class="p">,</span> <span class="n">displayer</span><span class="p">);</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="c11">C++11</h2>
+
+<p>In a contest setting it has, at least in the past, been rare to have C++11 support.
+However, I imagine the times are changing and C++11 is going to become more and more available in contest settings (especially with the advent of python being available).
+C++11 offers a couple of nice language features that can ease the pain of boilerplate, especially around iterators.
+A competitor needs to keep his wits about him though and not rely on these features as a crutch, otherwise he might find himself without C++11 and needing to know how to write out the type of that <code class="highlighter-rouge">map&lt;string, map&lt;string, int&gt; &gt;</code> iterator and sub-iterator, as well as what they return and why.</p>
+
+<h3 id="auto-keyword-and-new-for-loop"><code class="highlighter-rouge">auto</code> Keyword and New For Loop</h3>
+
+<p>One of the more useful language benefits is the <code class="highlighter-rouge">auto</code> keyword.
+If you’ve ever worked in C#, <code class="highlighter-rouge">auto</code> is more or less your <code class="highlighter-rouge">var</code>.
+It is type deduction at compile time, where the compiler will figure out (if it can) exactly what type is required for a certain expression without you having to write it out.</p>
+
+<p>The new for loop expression is a “for each” loop.
+It works particularly well in conjunction with the <code class="highlighter-rouge">auto</code> keyword.
+The syntax is simple enough, instead of the boilerplate of defining your own iterator range, when it ought to stop, and how much to increment it, you tell the compiler you want to touch all the items in a container: <code class="highlighter-rouge">for (auto x : container) { ... }</code>.</p>
+
+<p>To use the above example (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">a1</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="s">"b"</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s">"c"</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span> <span class="p">};</span>
+   <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">a2</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="s">"b"</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span> <span class="p">{</span><span class="s">"c"</span><span class="p">,</span> <span class="mi">5</span><span class="p">}</span> <span class="p">};</span>
+   <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="s">"a"</span><span class="p">,</span> <span class="n">a1</span><span class="p">},</span> <span class="p">{</span><span class="s">"d"</span><span class="p">,</span> <span class="n">a2</span><span class="p">}</span> <span class="p">};</span>
+   <span class="c1">// pre C++11</span>
+   <span class="k">typedef</span> <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+   <span class="k">typedef</span> <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">subiter</span><span class="p">;</span>
+   <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="n">it</span> <span class="o">=</span> <span class="n">m</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">m</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="n">subiter</span> <span class="n">sit</span> <span class="o">=</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">sit</span> <span class="o">!=</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">sit</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">sit</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">sit</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+   <span class="c1">// post C++11</span>
+   <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">v</span> <span class="o">:</span> <span class="n">m</span><span class="p">)</span>
+      <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">x</span> <span class="o">:</span> <span class="n">v</span><span class="p">.</span><span class="n">second</span><span class="p">)</span>
+         <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>As a general rule <code class="highlighter-rouge">auto</code> should be used to save you time, not because you don’t know what type you want.
+However, if you <em>don’t know</em> and auto helps you tease out what it is, or helps you get the solve, then no one is going to complain during the contest.
+You’ll get teased afterwards.</p>
+
+<h3 id="initializer-lists">Initializer Lists</h3>
+
+<p>An initializer list is that funny syntax you’ve seen me use in several prior examples.
+It’s the bracket notion with literals, e.g. <code class="highlighter-rouge">{1, 2, 3}</code>.
+An initializer list is a convenient way to work with complicated shapes or just pairs of values.
+Although a <code class="highlighter-rouge">make_pair(...)</code> isn’t terribly difficult to do, you can also just <code class="highlighter-rouge">{...}</code> and throw it in.</p>
+
+<p>Example (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">m</span><span class="p">;</span>
+   <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">answer</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">}</span> <span class="p">};</span>
+   <span class="n">m</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">});</span>
+   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+   <span class="n">m</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">});</span>
+   <span class="n">m</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="n">z</span><span class="p">,</span> <span class="mi">6</span><span class="p">});</span>
+   <span class="n">assert</span><span class="p">(</span><span class="n">equal</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">m</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">answer</span><span class="p">.</span><span class="n">begin</span><span class="p">()));</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Initializer lists are hit or miss.
+In the instances where they can be used they’re often quite nice, but they’re not always supported out of the box and have certain pitfalls.
+You can think of an initializer list as just a range of items that a function call (which accepts an initializer list) will iterate over and attempt to use.
+Because of the generality of these algorithms you might run into problems were the compiler complains about requiring explicit construction from the sub-lists in say a <code class="highlighter-rouge">vector&lt;tuple&lt;...&gt;&gt;</code>.
+In a contest setting it’s a double edged sword which could lead to grieve with long compiler errors, but it can also speed up certain scenarios from needing <code class="highlighter-rouge">make_pair()</code> everywhere.
+My advice is to try it out in a test program if you’re not certain how it’s going to behave.</p>
+
+<h3 id="lambdas">Lambdas</h3>
+
+<p>Lambdas are an addition to C++11 that should probably rarely be used in a contest setting.
+However, there are times when you need a function to pass into a STL algorithm, like <code class="highlighter-rouge">generate</code> or <code class="highlighter-rouge">sort</code> that we’ve seen before, and whipping it up in a lambda can be faster than implementing a struct, overloading the call operator, and then going from there (basically a boilerplate lambda).</p>
+
+<p>A lambda expression takes this full form: <code class="highlighter-rouge">[ *capture-list* ] ( *params* ) mutable *exception attribute* -&gt; *return type* { *body* }</code>.
+However, the entire <em>params</em> portion is optional, the <code class="highlighter-rouge">mutable</code> keyword with <em>exception attribute</em> is optional, and the <em>return type</em> with it’s arrow <code class="highlighter-rouge">-&gt;</code> are also optional.
+These parts aren’t independently optional, but the only bits you need to worry about is <code class="highlighter-rouge">mutable</code> and <em>return type</em>.
+If you want to mutate, you need to have a parameter list and return.
+If you want to return, you need to have a parameter list.</p>
+
+<p>The capture list in the lambda expression is to capture variables in the parent scope of the expression that aren’t going to be passed in as parameters.
+You could just not capture anything and pass all needed values as parameters, but that would be a bother.
+The capture list can capture by value or by reference, e.g. <code class="highlighter-rouge">[a, &amp;b]</code> capturing <code class="highlighter-rouge">a</code> by value and <code class="highlighter-rouge">b</code> by reference.
+You can automatically capture every variable available to you by reference or by value with <code class="highlighter-rouge">[&amp;]</code> and <code class="highlighter-rouge">[=]</code> respectively.
+Asides from that, it’s like writing any other kind of function, although you need to end the expression with a semicolon.</p>
+
+<p>Example (C++11):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+   <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">auto</span> <span class="n">generator</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">val</span><span class="p">]</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">int</span> <span class="p">{</span> <span class="k">return</span> <span class="o">++</span><span class="n">val</span><span class="p">;</span> <span class="p">};</span>
+   <span class="k">auto</span> <span class="n">displayer</span> <span class="o">=</span> <span class="p">[]</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span> <span class="p">};</span>
+   <span class="n">generate</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">generator</span><span class="p">);</span>
+   <span class="n">for_each</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">displayer</span><span class="p">);</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="regex">Regex</h3>
+
+<p>A double-edged sword if there ever was one, regex is that fancy regular language with back reference extras that everyone should love and hate equally.
+Especially in a contest setting.
+There are definitely problems were regex is undeniably your friend, so you spent the five minutes getting the expression correct and now the problem is just solved.
+However, regex can often be thought of as a one size fits all magic bullet.
+That alone is bad enough, but coupled with overconfidence and you’ve got wasted time, effort, and a solution that’s probably way too slow.</p>
+
+<p>One of the biggest problems with regex solutions is not being able to grasp the runtime complexity as easily as other solutions.
+The runtime complexity is dependent on the implementation under the hood and the features of that implementation you decide to use.
+When you write a regex expression, you’re writing a little program in an esoteric language, that makes things harder to understand, harder to implement, and significantly more painful when you discover you don’t actually know what the problem is asking.</p>
+
+<p>With all of these downsides, I’ll remind you that sometimes regex is just what the doctor ordered.
+Not commonly, but sometimes.
+There is too much detail that needs to be understood about regex for me to elucidate it in an introduction, but suffice to say it is present in C++11, and if you know what you’re doing don’t be too afraid to use it.</p>
+
+<h2 id="general-c-style">General C++ Style</h2>
+
+<p>There are a view style guidelines what will help you when you’re programming in a competitive setting.
+If you’ve analyzed the code snippets in this post already you may have noticed a couple of interesting things.
+The first is the include header.
+In every example there is only one include header, <code class="highlighter-rouge">#include &lt;bits/std++.h&gt;</code>.
+This is a compiler specific header that will include all of the STL headers for you.
+Its uses outside of a competitive setting are for pre-compiled headers, but for us it’s a quick way to get everything we are going to want.
+It should be noted again that this header is not part of the standard, and it’s possible that a compiler wont support it.
+Most of the time a contest setting is using some variant of gcc in which case it’s very likely the header will be supported.</p>
+
+<p>The next tidbit is <code class="highlighter-rouge">using namespace std;</code> which comes immediately after.
+This statement is to prevent the need to prefix every standard call with <code class="highlighter-rouge">std::</code>.
+It’s just a quick time saver to prevent those same five characters from appearing and reappearing.</p>
+
+<p>A couple of final remarks on style.
+Competitive problems almost always give a bounds on the input variables.
+These bounds are guarantees and do not need to be checked.
+More often than not someone brand new to competitive programming will add <code class="highlighter-rouge">if</code> statements attempting to confirm these bounds to make sure they’re okay without needing to.
+The reverse of that is using the information supplied by the bounds to initialize just enough memory in a convenient and cache efficient static array.
+If you can do this: <code class="highlighter-rouge">int array[10001];</code> then you should.
+Other minor details are that the <code class="highlighter-rouge">main</code> function does not need arguments or a <code class="highlighter-rouge">return 0;</code> statement at the end, although it does not hurt.</p>
+
+<h2 id="io-performance">IO Performance</h2>
+
+<p>Very rarely IO in a problem turns out to be the bottleneck of your solution.
+There are two ways to go about correcting this if you ever suspect it to be an issue:</p>
+
+<ol>
+  <li>Use C-style IO, with scanf and printf for everything.</li>
+  <li>Unsync and untie C++ io streams from C io streams.</li>
+</ol>
+
+<p>To go about the second method, you can just add this struct to the top of all of your solutions:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">struct</span> <span class="n">iofix</span> <span class="p">{</span>
+   <span class="n">ios_base</span><span class="o">::</span><span class="n">Init</span> <span class="n">i</span><span class="p">;</span>
+   <span class="n">iofix</span><span class="p">()</span> <span class="p">{</span> <span class="n">cin</span><span class="p">.</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">}</span> <span class="n">iofix</span><span class="p">;</span></code></pre></figure>
+
+<h2 id="java">Java</h2>
+
+<p>C++ is my preferred language of choice for competitive programming.
+That doesn’t make Java any worse or any better, it can handle all of the aspects here and perform equally well in a contest setting.
+That is of course not to say it’s perfect, either.
+It’s just different, but there are some undeniable benefits to Java, and that’s what this section is about.</p>
+
+<h3 id="when-to-bother">When to Bother</h3>
+
+<p>Switching from a language you’re most comfortable in to a language that you might not have used in years is a big risk, especially in a high stress environment like the last hour of a contest with a problem on the line.
+Being able to weigh the benefits for the rewards is the best way to make sure that the right call is made in that stressful moment.
+Going with Java means you have to change paradigms to a language with garbage collection that forces object oriented design principles on you when you just want to write a bloody function.
+Even worse, you’re probably going to be working with an old version of Java and not have more of the useful features available to you.</p>
+
+<p>All the same, if the problem you’re tackling can be solved or greatly assisted by any of: <code class="highlighter-rouge">BigInteger</code>, <code class="highlighter-rouge">BigDecimal</code>, <code class="highlighter-rouge">LocalDate</code> (Java 8), <code class="highlighter-rouge">Line2D</code>, <code class="highlighter-rouge">Arc2D</code>, <code class="highlighter-rouge">Polygon</code>, or regex (and you don’t have C++11), then you should probably choose Java.
+All of these instances are quite rare, and all of them can be solved in C++ land with a little bit of know-how and careful planning.
+Yet, they’re all already there in Java, ready and waiting.</p>
+
+<h3 id="biginteger-and-bigdecimal">BigInteger and BigDecimal</h3>
+
+<p>The arbitrary arithmetic helper classes <code class="highlighter-rouge">BigInteger</code> and <code class="highlighter-rouge">BigDecimal</code> in Java can outright solve some otherwise difficult math problems.
+It is incredibly rare (verging on non-existent) for the intended solution to a problem to require arbitrary precision arithmetic.
+There are however problems, like computing factorials, which can be “cheesed” with <code class="highlighter-rouge">BigInteger</code>.
+There are also instances of testing primality of a large integers which can be “cheesed” with probabilistic algorithms (already present in <code class="highlighter-rouge">BigInteger</code>).
+These are both risky prospects, because an astute and determined problem writer is either going to concede that these are proper solutions or guarantee they’ll fail.
+In the heat of the moment, though, if you don’t know the correct solution, but you know how to solve it with these classes, then go for it.</p>
+
+<p>Example (Java 7 or 8):</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.math.BigInteger</span><span class="o">;</span>
+<span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+   <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+   <span class="o">{</span>
+      <span class="n">BigInteger</span> <span class="n">factorial</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BigInteger</span><span class="o">(</span><span class="s">"1"</span><span class="o">);</span>
+      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span>
+      <span class="o">{</span>
+         <span class="n">factorial</span> <span class="o">=</span> <span class="n">factorial</span><span class="o">.</span><span class="na">multiply</span><span class="o">(</span><span class="k">new</span> <span class="n">BigInteger</span><span class="o">(</span><span class="s">""</span> <span class="o">+</span> <span class="n">i</span><span class="o">));</span>
+      <span class="o">}</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">factorial</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+   <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h3 id="localdate">LocalDate</h3>
+
+<p>A Gregorian calendar is the fancy name for the calendar that just about everyone across the world uses.
+Just about as rarely as intentional arbitrary arithmetic problems, you’ll get a problem that deals with large spans of time over a calendar year that expects you to handle all the little details.
+This is arguably easier to handle in C++ if you already know some formulas to generate a calendar and manipulate it, but if you don’t, you’re probably out of luck.</p>
+
+<p>Enter <code class="highlighter-rouge">LocalDate</code>, a concrete implementation of an every day calendar.
+There are some hang ups to using this class, mostly being accustom to using it.
+It’s unlikely for anyone to expect you to memorize the Java <code class="highlighter-rouge">LocalDate</code> object and how to use it, so what you should expect is for it to show up in your reference material.
+From there, you can figure out how exactly to use it and solve that quirky calendar problem without too much worry.</p>
+
+<p>Example (Java 8):</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.time.LocalDate</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.time.temporal.ChronoUnit</span><span class="o">;</span>
+<span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+   <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+   <span class="o">{</span>
+      <span class="n">LocalDate</span> <span class="n">birthday</span> <span class="o">=</span> <span class="n">LocalDate</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">1990</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>
+      <span class="n">LocalDate</span> <span class="n">now</span> <span class="o">=</span> <span class="n">LocalDate</span><span class="o">.</span><span class="na">now</span><span class="o">();</span>
+      <span class="kt">long</span> <span class="n">years</span> <span class="o">=</span> <span class="n">ChronoUnit</span><span class="o">.</span><span class="na">YEARS</span><span class="o">.</span><span class="na">between</span><span class="o">(</span><span class="n">birthday</span><span class="o">,</span> <span class="n">now</span><span class="o">);</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">years</span><span class="o">);</span> <span class="c1">// Should be 25</span>
+   <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>In the above example <code class="highlighter-rouge">ChronoUnit</code> is used to compute the years between two <code class="highlighter-rouge">LocalDate</code>s.
+There are a couple helper classes in <code class="highlighter-rouge">java.time</code> and <code class="highlighter-rouge">java.time.temporal</code> that interact with <code class="highlighter-rouge">LocalDate</code> or other useful time abstractions.
+Although we only touch on <code class="highlighter-rouge">LocalDate</code> here, it wouldn’t hurt to explore these options.</p>
+
+<h3 id="geometry">Geometry</h3>
+
+<p>Geometry is probably the best example of what can be gained from switching to Java.
+Rarely is there an “easy” geometry problem that can’t be solved with some quick math, but geometry problems can run the gambit from easy to impossible.
+Throughout all possibilities, it’s definitely nice not having to implement your own line class and intersect function.
+If you’ve got a math guy with you who knows how to use <code class="highlighter-rouge">complex&lt;T&gt;</code> in C++ as a two dimensional vector and can derive the problem, then let him have it.
+Otherwise, it can’t hurt to switch over and utilize all those handy geometric objects and associated functions to get a solve on that otherwise time consuming geometry problem.</p>
+
+<p>Example (Java 7 or 8):</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.awt.geom.Line2D</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.geom.Line2D.Double</span><span class="o">;</span>
+<span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+   <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+   <span class="o">{</span>
+      <span class="n">Line2D</span> <span class="n">l1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Line2D</span><span class="o">.</span><span class="na">Double</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+      <span class="n">Line2D</span> <span class="n">l2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Line2D</span><span class="o">.</span><span class="na">Double</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+      <span class="kt">boolean</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="na">intersectsLine</span><span class="o">(</span><span class="n">l2</span><span class="o">);</span>
+      <span class="k">assert</span> <span class="n">ans</span><span class="o">;</span>
+   <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h3 id="regex-1">Regex</h3>
+
+<p>Much like the section on C++11 regex, all the same dos and don’ts apply.
+If you find yourself in need of a regex library, and also don’t have C++11 available, then Java has come to the rescue.
+I’ll reiterate, make sure you know what you’re doing.
+Make sure you know what you’re doing.
+Make sure the problem <em>actually calls for regex</em> and you’re not taking a sledge hammer to a screw.</p>
+
+<h2 id="final-tips">Final Tips</h2>
+
+<p>Breathe, relax, have fun, and make sure to print out and build a binder or some kind of reference material out of anything you know you’re going to forget but will probably need.
+In almost any off-line contest you’re allowed any written material you can carry!
+Make a template file with all of your headers, needed functions, macros, or what have you.
+You don’t have to make it instantly, but if there is a lull have someone work it out so you don’t have to redo the work.
+The template doesn’t have to be just for C++ either, a quick and easy Java template can’t hurt in a lull period either.</p>
+
+<p>You should also take a look at the <a href="http://en.cppreference.com/w/">C++ Reference</a> and <a href="http://docs.oracle.com/javase/8/docs/api/">Java Reference</a>.</p>
+
+<p>My C++ template (as of today):</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;bits/stdc++.h&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">iofix</span>
+<span class="p">{</span>
+   <span class="n">ios_base</span><span class="o">::</span><span class="n">Init</span> <span class="n">i</span><span class="p">;</span>
+   <span class="n">iofix</span><span class="p">()</span> <span class="p">{</span>
+      <span class="n">cin</span><span class="p">.</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+      <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+   <span class="p">}</span>
+<span class="p">}</span> <span class="n">iofix</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">i32</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">i64</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">u32</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">u64</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">muse life</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li><p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p></li>
+          <li><a href="mailto:"></a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/amarmaduke"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">amarmaduke</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/numbergames"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">numbergames</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>A random blog about topics from math, computer science, physics, to philosophy that are considered interesting at the time.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
