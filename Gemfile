@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
-gem 'jekyll', '~> 3.6.0'
-gem 'execjs', '~> 2.4.0'
+gem 'jekyll', '~> 3.8.3'
+gem 'execjs-fastnode'
 
 group :jekyll_plugins do
     gem 'jekyll-algolia'

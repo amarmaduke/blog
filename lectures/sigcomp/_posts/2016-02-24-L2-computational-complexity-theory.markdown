@@ -202,12 +202,15 @@ For that we need to learn a couple other tricks.
 ### Asymptotic Analysis
 
 <div class="definition">
-Given functions \(f : Params \to \mathbb{R}\) and \(g : Params \to \mathbb{R}\) with some shared parameter space \(Params\), then we say \(f\) is in the \(\textit{complexity class}\) \(\mathcal{O}(g)\), \(f \in \mathcal{O}(g)\), if there exists \(c : \mathbb{R}\) and parameters \(n_0, n_1, \cdots, n_k : Params\) for finite \(k\) such that for all \(m_i \geq n_i\) we have \(f(m_0, \cdots, m_k) \leq cg(m_0, \cdots, m_k)\).
+{% katex %}
+Given functions $$f : Params \to \mathbb{R}$$ and $$g : Params \to \mathbb{R}$$ with some shared parameter space $$Params$$, then we say $$f$$ is in the _complexity class_ $$\mathcal{O}(g)$$, $$f \in \mathcal{O}(g)$$, if there exists $$c : \mathbb{R}$$ and parameters $$n_0, n_1, \cdots, n_k : Params$$ for finite $$k$$ such that for all $$m_i \geq n_i$$ we have $$f(m_0, \cdots, m_k) \leq cg(m_0, \cdots, m_k)$$.
+{% endkatex %}
 </div>
 
 This definition is trying to convey a simple idea.
 If we have two functions that measure how much time it takes for a program to do something then if one of those measurements is always smaller than a constant times the other after some fixed parameter input then that smaller measurement is in the $$\textit{complexity class}$$ of the larger measurement.
 
+{% katex %}
 Consider the following two functions, $$f(n) = 2n^2$$ and $$g(n) = n^2$$, with one parameter $$n$$ the size of the input.
 It might seem strange at first but we can show $$f \in \mathcal{O}(n^2)$$.
 This is easy enough to prove, select $$c = 3, n_0 = 0$$ and it's trivial.
@@ -222,18 +225,19 @@ Consider $$f(n) = n^2 + n + 1$$.
 If you're keen enough, you should be able to prove $$f \in \mathcal{O}(n^2)$$.
 This is very useful, we can ignore parts of the computation that don't play a role at scale.
 We have a quick and effective method of determining the practicality of our algorithm.
+{% endkatex %}
 
 This kind of notation to express complexity classes is called Big-O notation.
 
 Here are some properties of Big-O:
 
-{% katex display %}
+{% katex display %} $$
 \begin{gathered}
 & \mathcal{O}(cf) = \mathcal{O}(f), \forall c : \mathbb{R}\\
 & \mathcal{O}(n^k + n^{k-1} + \cdots + n + 1) = \mathcal{O}(n^k), \forall~\text{finite}~k\\
 & f \in \mathcal{O}(g) \implies \mathcal{O}(g + cf) = \mathcal{O}(g), \forall c : \mathbb{R}
 \end{gathered}
-{% endkatex %}
+$$ {% endkatex %}
 
 
 ### The Constant Matters
@@ -251,6 +255,7 @@ For that reason you should at least keep in mind that the constant can, and does
 
 ## The Pragmatic Hierarchy
 
+{% katex %}
 If you'd like to learn more about the background and theory involved with Big-O notation, Computation Complexity Theory, and Complexity Theory then I encourage you to pick up and read {% cite Sisper2006 %} and {% cite Arora2009 %}.
 Both texts will also discuss the Complexity Hierarchy and you'll learn plenty about $$P \stackrel{?}{=} NP$$ and other hard questions.
 However, we're going to discuss a different kind of hierarchy.
@@ -273,6 +278,7 @@ With the smallest appropriate complexity class chosen you can compare it to othe
 If your algorithm is $$\mathcal{O}(n^2)$$ but your partners is $$\mathcal{O}(n)$$, then after some vetting of correctness you should go with your partners approach.
 Knowing this hierarchy gives you the freedom of easily choosing between potential algorithms to know which one is going to be fast enough.
 Take a look at the plot below to get a better understanding of how these complexity classes scale.
+{% endkatex %}
 
 ![plots](/img/lectures/sigcomp/bigoplots.svg)
 
@@ -319,6 +325,7 @@ Play the graphic below to gain some insight:
 
 <svg id="fig1" width="800" height="200"></svg>
 
+{% katex %}
 The leftmost grid is doing $$n \times n$$ steps, the middle is doing about half as many steps as the leftmost, and the rightmost is doing $$n \times \log(n)$$ steps.
 To represent the time complexity we would say the algorithms are $$\mathcal{O}(n^2)$$, $$\mathcal{O}(n^2)$$, and $$\mathcal{O}(n\log(n))$$ respectively.
 It's true that the middle grid is taking a constant factor less steps, but remember that Big-O notation does not capture that constant multiplier.
@@ -333,22 +340,31 @@ Assuming the queries define a set of indices one approach is to scan from the le
 Suppose the size of the array can be very large, but the number of queries (perhaps per second) is relatively small.
 If we only need to do ten queries a second then a $$\mathcal{O}(nq)$$ approach might be perfectly fine.
 However, an oversimplification to $$\mathcal{O}(n^2)$$ could trick us into thinking our algorithm isn't good enough when it might clearly be.
+{% endkatex %}
 
 ### Counting Principles
 <div class="definition">
-A \(\textit{permutation}\) of a sequence \(S\) is a reordering of its elements.
+{% katex %}
+A $$\textit{permutation}$$ of a sequence $$S$$ is a reordering of its elements.
+{% endkatex %}
 </div>
 
 <div class="definition">
-A \(\textit{permutation with repetition}\) or \(word\) of some alphabet is a ordered selection of \(n\) elements from a sequence or alphabet \(S\) where the same element may be selected arbitrarily many times to form a new sequence \(S'\).
+{% katex %}
+A $$\textit{permutation with repetition}$$ or $$word$$ of some alphabet is a ordered selection of $$n$$ elements from a sequence or alphabet $$S$$ where the same element may be selected arbitrarily many times to form a new sequence $$S'$$.
+{% endkatex %}
 </div>
 
 <div class="definition">
-A \(\textit{combination}\) is a selection of \(k\) distinct elements from a set \(S\) which form a subset of \(S\).
+{% katex %}
+A $$\textit{combination}$$ is a selection of $$k$$ distinct elements from a set $$S$$ which form a subset of $$S$$.
+{% endkatex %}
 </div>
 
 <div class="definition">
-A \(\textit{combination with repetition}\) is a selection of \(k\) elements from a set \(S\) which form a multiset \(M\).
+{% katex %}
+A $$\textit{combination with repetition}$$ is a selection of $$k$$ elements from a set $$S$$ which form a multiset $$M$$.
+{% endkatex %}
 </div>
 
 These are the four useful methods of counting that can be categorized easily and applied effectively to determine computational complexities.
@@ -363,6 +379,7 @@ If you encounter a counting problem that you can determine requires an ordering 
 
 So how do we compute these?
 
+{% katex %}
 A permutation of a sequence of length $$n$$ is $$n!$$ or $$n(n-1)(n-2)\cdots(2)(1)$$.
 This can be seen by imagining we have $$n$$ empty spots in a queue.
 The first spot can be selected from any of the available members of the original sequence.
@@ -397,9 +414,11 @@ Sometimes a problem will be glaringly obvious that it wants you to work with per
 Sometimes, you can just generate all the permutations via `next_permutation` in the C++ Standard Template Library and perform a complete search in $$\mathcal{O}(n!)$$.
 However, that is for us to be considered just about the *worst* you could do.
 If it works, it works, but that problem could also be conveying that you need a clever solution and a complete search of the permutations isn't going to cut it.
+{% endkatex %}
 
 ### Examples
 
+{% katex %}
 Let's return to computing the Fibonacci sequence.
 In the first code sample provided on this topic we used a recursive function to search down until we bottomed out at $$n = 0$$ or $$1$$ which returned $$1$$ and then unraveled the recursion back up.
 For a given index of the Fibonacci sequence $$n$$, what is the time complexity of computing the nth Fibonacci number using this method?
@@ -469,6 +488,7 @@ A doorplate on an office door can only hold $$n$$ digits.
 What is the maximum number of office doors, assuming they are all lucky numbers, that the new office can have?
 The input is one number, $$n$$ ($$1 \leq n \leq 55$$), the output should be one number, the maximum number of offices.
 The problem must be solved in less than half a second with less than 64 megabytes of space used.
+{% endkatex %}
 
 A first naive approach could be the following:
 Generate all the lucky numbers in lexicographical order until you reach a number whose digit length is greater than $$n$$, output the total count.
@@ -501,6 +521,7 @@ int main() {
 }
 {% endhighlight %}
 
+{% katex %}
 You may have had trouble coming up with the actual implementation for the solution yourself.
 That's fine, we're more interested in time complexity, but take a good look at the above solution if you want to really grasp what it's doing.
 It turns out you're computing all the permutations of length $$1, \cdots, n$$ with repeated entries.
@@ -513,6 +534,7 @@ Well, as it turns out the problem is only interested in *counting* the number of
 When we computed the time complexity, we were doing just that (with some hand waving of lower order terms).
 It turns out that for a word of length $$n$$ with two possible letters the number of permutations is $$2^n$$, and for a word of length $$n-1$$ it's $$2^{n-1}$$, and so on.
 With this observation, we can come up with a new solution that solves the problem in $$\mathcal{O}(n)$$ instead:
+{% endkatex %}
 
 {% highlight c++ %}
 #include <bits/stdc++.h>
@@ -537,8 +559,10 @@ However, in a competitive setting, there is additional information which is cruc
 Almost every problem will incorporate some kind of variable bound.
 Whether it's on the size of an array, the number of vertices, or some other variable described in the problem.
 
+{% katex %}
 Consider the following problem:
 Compute the sum from $$1$$ to $$n$$ and output that sum modulo $$2^{19} - 1$$ in less than one second, where $$2 \leq n \leq 10^{10}$$.
+{% endkatex %}
 
 Let's try a naive solution:
 {% highlight c++ %}
@@ -556,6 +580,7 @@ int main() {
 }
 {% endhighlight %}
 
+{% katex %}
 A single for loop, a cool $$\mathcal{O}(n)$$ solution!
 Except it's way too slow.
 We can see this by using the highest bound on $$n$$, $$10^{10}$$.
@@ -565,6 +590,7 @@ Any more operations and you're pushing your luck.
 Of course, this is a broad generalization of the reality, and if your constant factor is reducing an eight million operation count worst case down to two million, then things just might work out.
 
 We can improve our algorithm by using an $$\mathcal{O}(1)$$ algorithm below, take a look and see if it makes sense.
+{% endkatex %}
 
 {% highlight c++ %}
 #include <bits/stdc++.h>
@@ -580,6 +606,7 @@ int main() {
 }
 {% endhighlight %}
 
+{% katex %}
 Here is another example.
 For $$q$$ queries, print the $$k$$th permutation of a given ordered string of length $$n$$ in less than two seconds, where $$1 \leq q \leq 1000$$, $$1 \leq n \leq 9$$.
 
@@ -591,6 +618,7 @@ Using the worst bound, $$n = 9$$, we have $$9! = 362880$$, well under a million.
 It should be noted that recomputing the permutation for every query is $$\mathcal{O}(qn!)$$, or $$1000(9!) = 362880000$$, about three hundred million.
 
 Try the below solution out for yourself, the input is assumed to be two numbers $$n$$ then $$q$$, a lexicographically ordered string, and then $$q$$ numbers that are smaller than $$n$$.
+{% endkatex %}
 
 {% highlight c++ %}
 #include <bits/stdc++.h>
