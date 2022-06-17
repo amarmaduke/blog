@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://marmamorphism.com/</loc>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/blog/</loc>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/blog/post1/</loc>
+        <lastmod>2022-06-16</lastmod>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/categories/</loc>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/categories/musings/</loc>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/projects/</loc>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/tags/</loc>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/tags/ignore/</loc>
+    </url>
+</urlset>

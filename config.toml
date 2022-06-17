@@ -20,7 +20,7 @@ taxonomies = [
 
 [markdown]
 highlight_code = true
-extra_syntaxes = []          
+extra_syntaxes_and_themes = ["syntaxes"]
 highlight_theme = "dracula"         # The highlight theme, choose one at https://www.getzola.org/documentation/getting-started/configuration/#syntax-highlighting
 render_emoji = true
 external_links_target_blank = false
