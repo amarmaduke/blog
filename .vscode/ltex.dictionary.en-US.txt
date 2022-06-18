@@ -1,0 +1,3 @@
+intensional
+concatenative
+expressibility
