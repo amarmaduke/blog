@@ -3,8 +3,8 @@
 #=========================================================================================
 
 base_url = "https://marmamorphism.com" # The domain of your site
-title = "Marmablog"
-description = "A blog about the ramblings of a marmamorph"
+title = "Marmasite"
+description = "A site about the ramblings of a marmamorph"
 default_language = "en"
 theme = "serene"
 output_dir = "public"

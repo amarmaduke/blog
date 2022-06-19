@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+	<title>Marmablog</title>
+	<subtitle>A blog containing the musings of a marmamorph</subtitle>
+	<link href="https://marmamorphism.com/blog/feed.xml" rel="self" type="application/atom+xml"/>
+    <link href="https://marmamorphism.com/blog/"/>
+	<updated>2022-06-19T00:00:00+00:00</updated>
+	<id>https://marmamorphism.com/blog/feed.xml</id>
+	<entry xml:lang="en">
+		<title>A Programming Language Wishlist</title>
+		<published>2022-06-19T00:00:00+00:00</published>
+		<updated>2022-06-19T00:00:00+00:00</updated>
+		<link href="https://marmamorphism.com/blog/1-gobble-wish-list/" type="text/html"/>
+		<id>https://marmamorphism.com/blog/1-gobble-wish-list/</id>
+		<content type="html">&lt;p&gt;I&#x27;ve been thinking about a programming language for a while that makes the trade-offs that I prefer.
+The high-level overview is something like this:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;no bound variables;&lt;&#x2F;li&gt;
+&lt;li&gt;a type system with at least dependent function types and refinement types;&lt;&#x2F;li&gt;
+&lt;li&gt;a DSL (Domain Specific Language) system that is conducive to inspection and easy extension;&lt;&#x2F;li&gt;
+&lt;li&gt;and efficient execution.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Let&#x27;s talk about each of these.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;no-bound-variables&quot;&gt;No Bound Variables&lt;&#x2F;h2&gt;
+&lt;p&gt;Bound variables are the heart and soul of the $\lambda$-calculus.
+Variables give you the ability to mark internal sharing and are pretty natural based on mathematical practice.
+So why get rid of them?
+The reason is three-fold.&lt;&#x2F;p&gt;
+&lt;p&gt;First, when you are dealing with first-class higher-order functions the variables get in the way of efficient execution by demanding some garbage collection discipline.
+One choice to recover efficiency is enforced linearity (i.e. a variable can only occur once in the body), but now you&#x27;re placing a seemingly arbitrary restriction on what was standard practice.&lt;&#x2F;p&gt;
+&lt;p&gt;Second, if you want easy quotable syntax the variables complicate things.
+Now the users creating macros have to handle bound variables too, usually by hygienic patterns.
+This is the path taken by many modern macro systems.&lt;&#x2F;p&gt;
+&lt;p&gt;Third, if you do have a robust DSL system then you can add in bound variables without much issue.
+To that point, why complicate the &lt;em&gt;core&lt;&#x2F;em&gt; system with bound variables if it can be implemented as a library feature?&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;rich-type-system&quot;&gt;Rich Type System&lt;&#x2F;h2&gt;
+&lt;p&gt;The lack of dependent types in most modern languages is caused by a few things.
+Dependent types do not play nice with effects (e.g. non-termination, exceptions, I&#x2F;O), they can complicate type checking, and your average programmer is scared of them.
+For a crash course in dependent function types, consider the following type: &lt;code&gt;Vec Nat n&lt;&#x2F;code&gt; which represents a list with &lt;em&gt;exactly&lt;&#x2F;em&gt; $n$ elements.
+This is impossible to represent in a lot of languages but pretty trivial in a language with dependent types.
+Together with the finite type: &lt;code&gt;Fin n&lt;&#x2F;code&gt; which represents a number in the range $[0, n)$ you have a safe, optimization friendly way to access arrays:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#282a36;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; array : &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#66d9ef;&quot;&gt;Vec&lt;&#x2F;span&gt;&lt;span&gt; Nat n &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= ...&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; index : Fin n &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;= ...&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    array[index] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;&#x2F; no bounds checks necessary&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Refinement types also seem like a pretty necessary feature, but they are more exotic.
+Languages like &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;agda&#x2F;agda&quot;&gt;Agda&lt;&#x2F;a&gt; and &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;coq.inria.fr&#x2F;&quot;&gt;Coq&lt;&#x2F;a&gt; don&#x27;t have refinement types in the sense I mean, but &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;www.fstar-lang.org&#x2F;&quot;&gt;F*&lt;&#x2F;a&gt; does.
+A simple refinement type is the type of even numbers:&lt;&#x2F;p&gt;
+&lt;p&gt;$$\texttt{Even} = \{ n: \mathbb{N}\ |\ n = 0 \mod 2 \}$$&lt;&#x2F;p&gt;
+&lt;p&gt;Critically, there should be a trivial cast (i.e. an identity function) that forgets the refinements and produces a natural number.
+This is not the same as wrapping up a natural number in a dependent pair where the second component is a proof the first is even.
+You also likely want some definitional equalities, such as $2 : \texttt{Even} \equiv 2 : \mathbb{N}$.
+These choices cause you to have an extrinsic type theory (i.e. a given term can have more than one type).&lt;&#x2F;p&gt;
+&lt;p&gt;Another critical requirement is that the type system supports axioms.
+In particular, recursive types with the added &lt;em&gt;axiom&lt;&#x2F;em&gt; that they are well-founded.
+This is in contrast to most systems which include syntactic requirements like strict positivity.
+Although, in plenty of other systems, like &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;www.idris-lang.org&#x2F;&quot;&gt;Idris&lt;&#x2F;a&gt;, a type-in-type discipline is used which allows general recursive types (and thus inconsistency).&lt;&#x2F;p&gt;
+&lt;p&gt;The point here is that recursive types should be an &lt;em&gt;unsafe&lt;&#x2F;em&gt; feature that demands some meta-obligations of the programmer, not unlike unsafe code in &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;&quot;&gt;Rust&lt;&#x2F;a&gt;, or &amp;quot;trust me&amp;quot; annotations on recursive functions in Agda or Idris.
+However, these &amp;quot;trust me&amp;quot; annotations are not spelled out in the formal core theory.
+They are tacked on, and the burden is shifted to the user to make sure they do things right.&lt;&#x2F;p&gt;
+&lt;p&gt;Coq and Rust do the best job, in my opinion, of giving the user guidelines of when axioms or meta-obligations are allowed.
+Coq has an entire &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;coq&#x2F;coq&#x2F;wiki&#x2F;CoqAndAxioms&quot;&gt;wiki-page&lt;&#x2F;a&gt; about axioms that you can expect to not break your development.
+Rust has some &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch19-01-unsafe-rust.html&quot;&gt;explicit rules&lt;&#x2F;a&gt; about what expectations are in place for unsafe code.
+However, it should also be noted how difficult it is to do &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;gankra.github.io&#x2F;blah&#x2F;fix-rust-pointers&#x2F;&quot;&gt;pointer cast in unsafe Rust correctly&lt;&#x2F;a&gt;!
+In this scenario, the meta-obligations are too strong.&lt;&#x2F;p&gt;
+&lt;p&gt;Regardless, the trade-off is a powerful and necessary one.
+Give the user an escape hatch with a well documented set of meta-obligations so that they can express themselves in code to the fullest extent possible.
+Moreover, deciding that a recursive function is well-founded is a daily occurrence for programmers and it is often trivially terminating from the perspective of the programmer (but often not trivially terminating from the perspective of syntactic criterion used in Coq or Agda!)&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;powerful-dsl-system&quot;&gt;Powerful DSL System&lt;&#x2F;h2&gt;
+&lt;p&gt;Let&#x27;s be honest, there is only one game in town when it comes to reasonable DSLs and that is &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;racket-lang.org&#x2F;&quot;&gt;Racket&lt;&#x2F;a&gt;.
+I don&#x27;t have much experience with Racket and think there is a lot to learn there.
+Also, I fundamentally agree that allowing the user to construct DSLs is important if you want a language to help a user express domain knowledge.
+Yet, macro systems are a complete disaster.
+The greatest failure of Lisp is perhaps its macro system.
+Macros in Lisp are so powerful that they make code written by a programmer completely incomprehensible.
+Somehow, they are also too weak to express the kinds of syntactic constructs that are more natural on pen-and-paper.
+This is likely why Racket is a thing at all, if Lisp solved DSLs at the onset there would be no Racket.&lt;&#x2F;p&gt;
+&lt;p&gt;What is needed of a good DSL system?
+I think the following things:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;easy inspection via the core syntax both with a debug representation and the actual representation;&lt;&#x2F;li&gt;
+&lt;li&gt;easy construction by well-known grammar definitions;&lt;&#x2F;li&gt;
+&lt;li&gt;and easy combination and interoperability between DSLs.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;To inspect a DSL I propose the requirement that any span of a DSL can be independently transformed into core syntax.
+For example, consider the following DSL code:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#282a36;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#50fa7b;&quot;&gt;quadratic&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ffb86c;&quot;&gt;c&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;-&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#8be9fd;&quot;&gt;usize &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        a&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span&gt; b&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;b &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span&gt; c&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In case you missed the implication, a language without bound variables basically ends up looking like a variation on &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;www.forth.com&#x2F;forth&#x2F;&quot;&gt;Forth&lt;&#x2F;a&gt;.
+Here is how I imagine the above representation being encoded:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#282a36;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;    [&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;&#x2F; stack starts as [c, b, a]&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        dup &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*       &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;&#x2F; compute a^2&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        swap dup &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;*  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;&#x2F; compute b^2&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff79c6;&quot;&gt;+ +         &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6272a4;&quot;&gt;&#x2F;&#x2F; compute a^2 + b^2 + c&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    ]&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    [quadratic]&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    define&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Where the syntax &lt;code&gt;[...]&lt;&#x2F;code&gt; is a &lt;em&gt;quote&lt;&#x2F;em&gt; inspired by &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Joy_(programming_language)&quot;&gt;Joy&lt;&#x2F;a&gt;.
+Now, if a user selects the &lt;code&gt;b*b&lt;&#x2F;code&gt; span in the DSL, they should be able to see that it maps to &lt;code&gt;swap dup *&lt;&#x2F;code&gt; code in the core syntax.
+It might not be the easiest to comprehend Forth-style (or really Joy-style) syntax for most programmers.
+Indeed, it is likely better to describe it as a high-level assembler, but the benefits are that it does always make sense, even if it takes some effort to figure out what.
+In contrast, someone&#x27;s invented notation with no documentation may &lt;em&gt;never&lt;&#x2F;em&gt; make sense.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;efficient-execution&quot;&gt;Efficient Execution&lt;&#x2F;h2&gt;
+&lt;p&gt;A concatenative programming language, which is ultimately what I am describing, yields to fairly obvious efficient execution by way of a linear type system.
+The real issue only arises with quotes which are the replacement for higher-order functions.
+For this, the proposed fix is to require that quotes are not data unless boxed or otherwise hidden behind a pointer.
+Ultimately, this pushes the garbage collection duties to the user, they have to construct smart pointers like reference counting.&lt;&#x2F;p&gt;
+&lt;p&gt;However, that is the main design principle behind all of this.
+Keep the core language as simple as possible without sacrificing expressibility or power.
+Push as much as possible into libraries.
+As the design grows this core principle will remain.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Initial commit</title>
+		<published>2022-06-16T00:00:00+00:00</published>
+		<updated>2022-06-16T00:00:00+00:00</updated>
+        <summary>&lt;p&gt;I haven&#x27;t written anything on my blog since 2017.
+That is a very long time.
+Personally, I think that is because I was under the illusion that the content of my blog has to be good, because people could read it.
+The reality, is that even if some random person &lt;em&gt;does&lt;&#x2F;em&gt; read it the likelihood I interact with this person about a blog post that they &lt;em&gt;didn&#x27;t&lt;&#x2F;em&gt; like is basically zero.&lt;&#x2F;p&gt;
+</summary>
+		<link href="https://marmamorphism.com/blog/0-initial-commit/" type="text/html"/>
+		<id>https://marmamorphism.com/blog/0-initial-commit/</id>
+		<content type="html">&lt;p&gt;I haven&#x27;t written anything on my blog since 2017.
+That is a very long time.
+Personally, I think that is because I was under the illusion that the content of my blog has to be good, because people could read it.
+The reality, is that even if some random person &lt;em&gt;does&lt;&#x2F;em&gt; read it the likelihood I interact with this person about a blog post that they &lt;em&gt;didn&#x27;t&lt;&#x2F;em&gt; like is basically zero.&lt;&#x2F;p&gt;
+&lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
+&lt;p&gt;Anyway here is some $\KaTeX$ because I want to test it out with this new blog setup.&lt;&#x2F;p&gt;
+&lt;p&gt;$$\int_0^x e^x dx$$&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m using Zola and the theme Serene, which you can see there at the bottom right.
+It is pretty spiffy and I like the theme overall, zola is also really nice a step up from Jekyll in my opinion.
+Anyway, if you are reading this, including you future Andrew, don&#x27;t take the blog too seriously, it&#x27;s just a romping good time.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+</feed>

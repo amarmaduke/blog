@@ -7,8 +7,12 @@
         <loc>https://marmamorphism.com/blog/</loc>
     </url>
     <url>
-        <loc>https://marmamorphism.com/blog/post1/</loc>
+        <loc>https://marmamorphism.com/blog/0-initial-commit/</loc>
         <lastmod>2022-06-16</lastmod>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/blog/1-gobble-wish-list/</loc>
+        <lastmod>2022-06-19</lastmod>
     </url>
     <url>
         <loc>https://marmamorphism.com/categories/</loc>
@@ -21,6 +25,12 @@
     </url>
     <url>
         <loc>https://marmamorphism.com/tags/</loc>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/tags/concatenative/</loc>
+    </url>
+    <url>
+        <loc>https://marmamorphism.com/tags/design/</loc>
     </url>
     <url>
         <loc>https://marmamorphism.com/tags/ignore/</loc>
