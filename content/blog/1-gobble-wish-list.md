@@ -22,9 +22,11 @@ The high-level overview is something like this:
 - a DSL (Domain Specific Language) system that is conducive to inspection and easy extension;
 - and efficient execution.
 
+<!-- more -->
+
 Let's talk about each of these.
 
-## No Bound Variables
+# No Bound Variables
 
 Bound variables are the heart and soul of the $\lambda$-calculus.
 Variables give you the ability to mark internal sharing and are pretty natural based on mathematical practice.
@@ -41,7 +43,7 @@ This is the path taken by many modern macro systems.
 Third, if you do have a robust DSL system then you can add in bound variables without much issue.
 To that point, why complicate the _core_ system with bound variables if it can be implemented as a library feature?
 
-## Rich Type System
+# Rich Type System
 
 The lack of dependent types in most modern languages is caused by a few things.
 Dependent types do not play nice with effects (e.g. non-termination, exceptions, I/O), they can complicate type checking, and your average programmer is scared of them.
@@ -85,7 +87,7 @@ Regardless, the trade-off is a powerful and necessary one.
 Give the user an escape hatch with a well documented set of meta-obligations so that they can express themselves in code to the fullest extent possible.
 Moreover, deciding that a recursive function is well-founded is a daily occurrence for programmers and it is often trivially terminating from the perspective of the programmer (but often not trivially terminating from the perspective of syntactic criterion used in Coq or Agda!)
 
-## Powerful DSL System
+# Powerful DSL System
 
 Let's be honest, there is only one game in town when it comes to reasonable DSLs and that is [Racket](https://racket-lang.org/).
 I don't have much experience with Racket and think there is a lot to learn there.
@@ -131,7 +133,7 @@ It might not be the easiest to comprehend Forth-style (or really Joy-style) synt
 Indeed, it is likely better to describe it as a high-level assembler, but the benefits are that it does always make sense, even if it takes some effort to figure out what.
 In contrast, someone's invented notation with no documentation may _never_ make sense.
 
-## Efficient Execution
+# Efficient Execution
 
 A concatenative programming language, which is ultimately what I am describing, yields to fairly obvious efficient execution by way of a linear type system.
 The real issue only arises with quotes which are the replacement for higher-order functions.
