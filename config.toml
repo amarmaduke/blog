@@ -53,8 +53,8 @@ toc_icon = "ri-menu-2-line"
 #============== Social media links =================================
 links = [
     {name = "GitHub", icon = "ri-github-line", url = "https://github.com/amarmaduke"},
-    {name = "Twitter", icon = "ri-twitter-line", url = "https://twitter.com/marmamorphism"},
-    {name = "Mastodon", icon = "ri-mastodon-fill", url = "https://types.pl/@marmamorphism"},
+    # {name = "Twitter", icon = "ri-twitter-line", url = "https://twitter.com/marmamorphism"},
+    # {name = "Mastodon", icon = "ri-mastodon-fill", url = "https://types.pl/@marmamorphism"},
     {name = "dblp", icon = "ri-file-paper-2-line", url = "https://dblp.org/pid/264/6375.html"},
     {name = "Google Scholar", icon = "ri-google-line", url = "https://scholar.google.com/citations?user=vp4TSr8AAAAJ"},
     # Your can add more links
