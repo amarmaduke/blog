@@ -5,7 +5,6 @@ template = 'home.html'
 lang = 'en'
 +++
 
-I'm a Computer Science PhD student working in the [Computational Logic Center](http://clc.cs.uiowa.edu/site/).
-My advisor is [Dr. Aaron Stump](https://homepage.divms.uiowa.edu/~astump/).
-I work with Aaron and others on [Cedille](https://github.com/cedille).
-My current research revolves around how Cedille's unique feature set (dependent intersections, equality, erased function spaces) can be used to capture and construct many of the ideas in other languages.
+I'm a Postdoc working in the [Computational Logic Center](http://clc.cs.uiowa.edu/site/) under [Dr. J. Garrett Morris](https://homepage.cs.uiowa.edu/~jgmorrs/).
+My primary focus is PL theory and mechanization using tools like Agda and Lean4.
+I also work on the formal theory and implementation of [Cedille2](https://github.com/cedille/cedille2).
