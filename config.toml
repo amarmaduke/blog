@@ -37,7 +37,7 @@ anchors = "on"
 [extra]
 name = "Andrew Marmaduke"                    # Your name
 id = "marmamorphism"                      # Your id/username/handle
-bio = "PhD candidate"                     # Your bio
+bio = "Postdoc"                     # Your bio
 avatar = "img/avatar.webp"       # Your avatar
 
 show_id = false                   # Whether to show your id in homepage
